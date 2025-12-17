@@ -1,0 +1,250 @@
+<!-- 创建个人主页（profile.html） -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人主页 - 深大校园圈</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- 导航栏（复用index.html的导航） -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>深大校园圈</span>
+                </a>
+                <div class="nav-menu">
+                    <a href="index.html" class="nav-item"><i class="fas fa-home"></i> 首页</a>
+                    <a href="#hot" class="nav-item"><i class="fas fa-fire"></i> 热门</a>
+                    <a href="post-edit.html" class="nav-item"><i class="fas fa-plus"></i> 发布动态</a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <div class="search-box">
+                    <input type="text" placeholder="搜索动态或用户...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+                <div class="user-menu" id="user-menu">
+                    <!-- 由JS动态填充 -->
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 个人主页内容 -->
+    <div class="profile-container">
+        <!-- 个人信息卡片 -->
+        <div class="profile-card">
+            <div class="profile-header">
+                <!-- 背景封面 -->
+                <div class="profile-cover" id="profile-cover">
+                    <button class="edit-cover-btn" id="edit-cover-btn">
+                        <i class="fas fa-camera"></i> 更换封面
+                    </button>
+                </div>
+                
+                <!-- 头像和基本信息 -->
+                <div class="profile-info">
+                    <div class="profile-avatar-container">
+                        <img src="images/default-avatar.png" alt="头像" class="profile-avatar" id="profile-avatar">
+                        <button class="edit-avatar-btn" id="edit-avatar-btn">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="profile-details">
+                        <h1 class="profile-name" id="profile-name">用户名</h1>
+                        <p class="profile-bio" id="profile-bio">个人简介...</p>
+                        
+                        <div class="profile-stats">
+                            <div class="stat-item">
+                                <strong id="follower-count">0</strong>
+                                <span>粉丝</span>
+                            </div>
+                            <div class="stat-item">
+                                <strong id="following-count">0</strong>
+                                <span>关注</span>
+                            </div>
+                            <div class="stat-item">
+                                <strong id="post-count">0</strong>
+                                <span>动态</span>
+                            </div>
+                            <div class="stat-item">
+                                <strong id="like-count">0</strong>
+                                <span>获赞</span>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-actions">
+                            <button class="btn btn-primary" id="follow-btn" style="display: none;">
+                                <i class="fas fa-user-plus"></i> 关注
+                            </button>
+                            <button class="btn btn-outline" id="message-btn" style="display: none;">
+                                <i class="fas fa-envelope"></i> 私信
+                            </button>
+                            <button class="btn btn-outline" id="edit-profile-btn">
+                                <i class="fas fa-edit"></i> 编辑资料
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 用户详情 -->
+            <div class="profile-details-grid">
+                <div class="detail-item">
+                    <i class="fas fa-id-card"></i>
+                    <div>
+                        <span class="detail-label">学号</span>
+                        <span class="detail-value" id="detail-student-id">2023000000</span>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-envelope"></i>
+                    <div>
+                        <span class="detail-label">邮箱</span>
+                        <span class="detail-value" id="detail-email">example@szu.edu.cn</span>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-graduation-cap"></i>
+                    <div>
+                        <span class="detail-label">专业</span>
+                        <span class="detail-value" id="detail-major">计算机科学</span>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <div>
+                        <span class="detail-label">注册时间</span>
+                        <span class="detail-value" id="detail-register-date">2024-01-01</span>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <span class="detail-label">最后活跃</span>
+                        <span class="detail-value" id="detail-last-active">刚刚</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 兴趣标签 -->
+            <div class="profile-tags">
+                <h3><i class="fas fa-tags"></i> 兴趣标签</h3>
+                <div class="tags-container" id="profile-tags">
+                    <!-- 标签将由JS动态生成 -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- 内容区域 -->
+        <div class="profile-content">
+            <!-- 标签导航 -->
+            <div class="profile-tabs">
+                <button class="tab-btn active" data-tab="posts">
+                    <i class="fas fa-newspaper"></i> 我的动态
+                </button>
+                <button class="tab-btn" data-tab="likes">
+                    <i class="fas fa-heart"></i> 点赞过的
+                </button>
+                <button class="tab-btn" data-tab="favorites">
+                    <i class="fas fa-star"></i> 收藏
+                </button>
+                <button class="tab-btn" data-tab="followers">
+                    <i class="fas fa-users"></i> 粉丝
+                </button>
+                <button class="tab-btn" data-tab="following">
+                    <i class="fas fa-user-friends"></i> 关注
+                </button>
+                <button class="tab-btn" data-tab="settings" id="settings-tab">
+                    <i class="fas fa-cog"></i> 设置
+                </button>
+            </div>
+            
+            <!-- 动态列表 -->
+            <div class="tab-content active" id="posts-content">
+                <div class="posts-container" id="user-posts">
+                    <!-- 用户的动态将在这里显示 -->
+                </div>
+            </div>
+            
+            <!-- 点赞过的动态 -->
+            <div class="tab-content" id="likes-content">
+                <div class="posts-container" id="liked-posts">
+                    <!-- 点赞过的动态将在这里显示 -->
+                </div>
+            </div>
+            
+            <!-- 收藏 -->
+            <div class="tab-content" id="favorites-content">
+                <div class="posts-container" id="favorite-posts">
+                    <!-- 收藏的动态将在这里显示 -->
+                </div>
+            </div>
+            
+            <!-- 粉丝列表 -->
+            <div class="tab-content" id="followers-content">
+                <div class="users-container" id="followers-list">
+                    <!-- 粉丝列表将在这里显示 -->
+                </div>
+            </div>
+            
+            <!-- 关注列表 -->
+            <div class="tab-content" id="following-content">
+                <div class="users-container" id="following-list">
+                    <!-- 关注列表将在这里显示 -->
+                </div>
+            </div>
+            
+            <!-- 设置 -->
+            <div class="tab-content" id="settings-content">
+                <div class="settings-container">
+                    <!-- 设置内容将在JS中动态生成 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑资料模态框 -->
+    <div class="modal" id="edit-profile-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>编辑个人资料</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-profile-form">
+                    <!-- 表单内容将在JS中动态生成 -->
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- <script>
+    console.log('HTML中的内联脚本已执行');
+    
+    // 检查 profile.js 是否成功加载
+    console.log('正在检查 profile.js...');
+    
+    // 动态测试文件是否存在
+    fetch('js/profile.js')
+        .then(response => {
+            if (response.ok) {
+                console.log('✅ profile.js 文件存在');
+            } else {
+                console.error('❌ profile.js 文件不存在或无法访问');
+            }
+        })
+        .catch(error => {
+            console.error('❌ 无法访问 profile.js:', error);
+        });
+</script> -->
+    <script src="js/app.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>
