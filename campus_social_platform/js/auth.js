@@ -234,10 +234,10 @@ function validateStep1() {
     
     // 验证密码
     if (password.length < 6) {
-        showFieldError('password', '密码至少需要6位字符');
+        showFieldError('password-error', '密码至少需要6位字符');  
         isValid = false;
     } else {
-        hideFieldError('password');
+        hideFieldError('password-error');
     }
     
     // 验证确认密码
@@ -248,12 +248,13 @@ function validateStep1() {
         hideFieldError('confirm-password-error');
     }
     
+   
     // 验证邮箱
     if (!isValidEmail(email)) {
-        showFieldError('email', '请输入有效的邮箱地址');
+        showFieldError('email-error', '请输入有效的邮箱地址'); 
         isValid = false;
     } else {
-        hideFieldError('email');
+        hideFieldError('email-error');  
     }
     
     if (isValid) {
@@ -269,7 +270,7 @@ function validateStep2() {
     
     // 验证昵称
     if (nickname.length < 2 || nickname.length > 20) {
-        showFieldError('nickname', '昵称长度应在2-20个字符之间');
+        showFieldError('nickname-error', '昵称长度应在2-20个字符之间');
         isValid = false;
     } else {
         // 检查昵称是否已存在
@@ -277,10 +278,10 @@ function validateStep2() {
         if (storedUsers) {
             const users = JSON.parse(storedUsers);
             if (users.some(u => u.nickname === nickname)) {
-                showFieldError('nickname', '该昵称已被使用');
+                showFieldError('nickname-error', '该昵称已被使用');
                 isValid = false;
             } else {
-                hideFieldError('nickname');
+                hideFieldError('nickname-error');
             }
         }
     }
@@ -331,28 +332,40 @@ function updatePasswordStrength() {
     
     if (!strengthBar || !strengthText) return;
     
-    let strength = 0;
-    let color = '#e74c3c'; // 红色，弱
-    let text = '密码强度：弱';
-    
-    if (password.length >= 6) strength++;
-    if (/[A-Z]/.test(password)) strength++;
-    if (/[a-z]/.test(password)) strength++;
-    if (/[0-9]/.test(password)) strength++;
-    if (/[^A-Za-z0-9]/.test(password)) strength++;
-    
-    // 根据强度设置颜色和文本
-    if (strength >= 4) {
-        color = '#2ecc71'; // 绿色，强
-        text = '密码强度：强';
-    } else if (strength >= 2) {
-        color = '#f39c12'; // 橙色，中
-        text = '密码强度：中';
-    }
+let strength = 0;
+let color = '#e74c3c'; // 红色，弱
+let text = '密码强度：弱';
+
+// 必须满足最低长度要求
+if (password.length < 6) {
+    // 直接返回，不继续计算
+    return { strength: 0, color, text: '密码至少6位' };
+}
+
+// 修改权重
+if (password.length >= 8) strength += 2;  // 长度更重要
+else if (password.length >= 6) strength += 1;
+
+if (/[A-Z]/.test(password)) strength++;  // 大写字母
+if (/[a-z]/.test(password)) strength++;  // 小写字母
+if (/[0-9]/.test(password)) strength++;  // 数字
+if (/[^A-Za-z0-9]/.test(password)) strength++;  // 特殊字符
+
+// 调整阈值
+if (strength >= 6) {  // 提高门槛
+    color = '#2ecc71';
+    text = '密码强度：强';
+} else if (strength >= 4) {  // 提高门槛
+    color = '#f39c12';
+    text = '密码强度：中';
+}
+if(strength >= 6) strength = 3; // 强
+else if(strength >=4) strength =2;
+else strength =1;
     
     // 更新UI
     strengthBar.style.setProperty('--strength-color', color);
-    strengthBar.style.width = `${strength * 20}%`;
+    strengthBar.style.width = `${strength * 33}%`;
     strengthBar.style.backgroundColor = color;
     strengthText.textContent = text;
 }
@@ -467,16 +480,18 @@ function handleAvatarUpload(e) {
 
 // 更新注册摘要
 function updateRegistrationSummary() {
-    // 获取表单数据
+   // 获取表单数据
     const studentId = document.getElementById('reg-student-id').value;
     const nickname = document.getElementById('reg-nickname').value;
     const email = document.getElementById('reg-email').value;
     
     // 更新摘要显示
+    const successNickname = document.getElementById('success-nickname');  // 成功消息中的昵称
     const summaryStudentId = document.getElementById('summary-student-id');
-    const summaryNickname = document.getElementById('success-nickname');
+    const summaryNickname = document.getElementById('summary-nickname');  // 摘要中的昵称
     const summaryEmail = document.getElementById('summary-email');
     
+    if (successNickname) successNickname.textContent = nickname;
     if (summaryStudentId) summaryStudentId.textContent = studentId;
     if (summaryNickname) summaryNickname.textContent = nickname;
     if (summaryEmail) summaryEmail.textContent = email;
@@ -593,9 +608,36 @@ function hideFieldError(fieldId) {
     }
 }
 
-// 辅助函数：验证邮箱格式
+// 邮箱综合验证方案
 function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+    if (!email || email.length === 0) {
+        return false;
+    }
+    
+    // 基本格式检查
+    const atIndex = email.indexOf('@');
+    if (atIndex < 1 || atIndex === email.length - 1) {
+        return false;
+    }
+    
+    const dotIndex = email.lastIndexOf('.');
+    if (dotIndex <= atIndex + 1 || dotIndex === email.length - 1) {
+        return false;
+    }
+    
+    // 不能有连续的点或@
+    if (email.includes('..') || email.includes('.@') || email.includes('@.')) {
+        return false;
+    }
+    
+    // 正则表达式验证
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+        return false;
+    }
+    
+    // 检查顶级域名长度
+    const domain = email.split('@')[1];
+    const tld = domain.split('.').pop();
+    return tld.length >= 2;
 }
-

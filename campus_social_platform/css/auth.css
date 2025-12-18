@@ -202,7 +202,22 @@
 .toggle-password:hover {
     color: var(--primary-color);
 }
+/* 密码错误提示 */
+.field-error {
+    color: #e74c3c;
+    font-size: 12px;
+    margin-top: 5px;
+    display: none;
+    padding: 5px 0;
+}
 
+/* 眼睛图标 - 通过i元素本身绘制 */
+.toggle-password i {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    display: block;
+}
 /* 密码强度 */
 .password-strength {
     margin-top: 10px;

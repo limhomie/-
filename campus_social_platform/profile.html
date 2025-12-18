@@ -7,6 +7,7 @@
     <title>个人主页 - 深大校园圈</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/profile.css">
+    <link rel="stylesheet" href="css/modal.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -211,40 +212,110 @@
         </div>
     </div>
 
-    <!-- 编辑资料模态框 -->
-    <div class="modal" id="edit-profile-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>编辑个人资料</h3>
-                <button class="modal-close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="edit-profile-form">
-                    <!-- 表单内容将在JS中动态生成 -->
-                </form>
-            </div>
+<!-- 编辑资料模态框 - 简化版 -->
+<div class="modal-overlay" id="edit-profile-modal" style="display: none;">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h3><i class="fas fa-edit"></i> 编辑个人资料</h3>
+            <button class="modal-close" id="close-edit-modal">&times;</button>
+        </div>
+        
+        <div class="modal-body">
+            <form id="edit-profile-form">
+                <!-- 昵称 -->
+                <div class="form-group">
+                    <label for="edit-nickname"><i class="fas fa-user"></i> 昵称</label>
+                    <input type="text" id="edit-nickname" placeholder="请输入昵称" maxlength="20">
+                    <div class="char-count">
+                        <span id="nickname-count">0</span>/20
+                    </div>
+                </div>
+                
+                <!-- 个人简介 -->
+                <div class="form-group">
+                    <label for="edit-bio"><i class="fas fa-file-alt"></i> 个人简介</label>
+                    <textarea id="edit-bio" placeholder="介绍一下你自己吧..." rows="3" maxlength="200"></textarea>
+                    <div class="char-count">
+                        <span id="bio-count">0</span>/200
+                    </div>
+                </div>
+                
+                <!-- 专业 -->
+                <div class="form-group">
+                    <label for="edit-major"><i class="fas fa-graduation-cap"></i> 专业</label>
+                    <select id="edit-major">
+                        <option value="计算机科学">计算机科学</option>
+                        <option value="软件工程">软件工程</option>
+                        <option value="网络工程">网络工程</option>
+                        <option value="人工智能">人工智能</option>
+                        <option value="数据科学">数据科学</option>
+                        <option value="信息安全">信息安全</option>
+                        <option value="电子信息工程">电子信息工程</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+                
+                <!-- 邮箱 -->
+                <div class="form-group">
+                    <label for="edit-email"><i class="fas fa-envelope"></i> 邮箱</label>
+                    <input type="email" id="edit-email" placeholder="邮箱地址">
+                </div>
+                
+                <!-- 兴趣标签 -->
+                <div class="form-group">
+                    <label><i class="fas fa-tags"></i> 兴趣标签</label>
+                    <div class="tags-input-container">
+                        <div class="selected-tags" id="selected-tags">
+                            <!-- 已选标签会动态添加到这里 -->
+                        </div>
+                        <input type="text" 
+                               id="tag-input" 
+                               placeholder="添加标签（按回车确认）"
+                               maxlength="10">
+                        <div class="tag-hint">输入标签后按 Enter 添加，最多添加5个标签</div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="cancel-edit">取消</button>
+            <button type="button" class="btn btn-primary" id="save-profile">保存修改</button>
         </div>
     </div>
-    <!-- <script>
-    console.log('HTML中的内联脚本已执行');
+</div>
+    <!-- 脚本文件 -->
+     <!-- 在最后添加这个测试脚本 -->
+<script>
+// 测试脚本
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('=== 页面加载完成 ===');
+    console.log('编辑按钮:', document.getElementById('edit-profile-btn'));
+    console.log('模态框:', document.getElementById('edit-profile-modal'));
+    console.log('关闭按钮:', document.getElementById('close-edit-modal'));
+    console.log('取消按钮:', document.getElementById('cancel-edit'));
+    console.log('保存按钮:', document.getElementById('save-profile'));
     
-    // 检查 profile.js 是否成功加载
-    console.log('正在检查 profile.js...');
+    // 手动测试函数
+    window.testEditModal = function() {
+        const modal = document.getElementById('edit-profile-modal');
+        if (modal) {
+            modal.classList.add('active');
+            console.log('模态框已打开（测试）');
+        }
+    };
     
-    // 动态测试文件是否存在
-    fetch('js/profile.js')
-        .then(response => {
-            if (response.ok) {
-                console.log('✅ profile.js 文件存在');
-            } else {
-                console.error('❌ profile.js 文件不存在或无法访问');
-            }
-        })
-        .catch(error => {
-            console.error('❌ 无法访问 profile.js:', error);
-        });
-</script> -->
+    window.testCloseModal = function() {
+        const modal = document.getElementById('edit-profile-modal');
+        if (modal) {
+            modal.classList.remove('active');
+            console.log('模态框已关闭（测试）');
+        }
+    };
+});
+</script>
     <script src="js/app.js"></script>
     <script src="js/profile.js"></script>
+    <script src="js/profile-edit.js"></script>
 </body>
 </html>

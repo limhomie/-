@@ -1,4 +1,4 @@
-// profile.js - 个人主页功能
+// profile.js - 个人主页功能（移除编辑功能）
 
 // 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', function() {
@@ -36,6 +36,28 @@ function initProfile() {
     
     // 更新统计信息
     updateProfileStats();
+    
+    // 初始化编辑资料按钮事件
+    initEditProfileButton();
+}
+
+// 初始化编辑资料按钮事件
+function initEditProfileButton() {
+    const editProfileBtn = document.getElementById('edit-profile-btn');
+    if (editProfileBtn) {
+        editProfileBtn.addEventListener('click', function() {
+            console.log('编辑资料按钮被点击');
+            
+            // 检查是否已加载profile-edit.js
+            if (typeof openEditModal === 'function') {
+                // 调用profile-edit.js的打开函数
+                openEditModal();
+            } else {
+                console.error('profile-edit.js未加载或openEditModal函数不存在');
+                alert('编辑功能暂不可用，请刷新页面重试');
+            }
+        });
+    }
 }
 
 // 获取当前用户
@@ -47,14 +69,16 @@ function getCurrentUser() {
 
 // 加载用户资料
 function loadUserProfile(user) {
+    console.log('加载用户资料:', user);
+    
     // 基本信息
-    document.getElementById('profile-name').textContent = user.nickname;
+    document.getElementById('profile-name').textContent = user.nickname || '用户名';
     document.getElementById('profile-bio').textContent = user.bio || '这个人很懒，还没有写简介...';
     document.getElementById('profile-avatar').src = user.avatar || 'images/default-avatar.png';
     
     // 详细资料
-    document.getElementById('detail-student-id').textContent = user.student_id;
-    document.getElementById('detail-email').textContent = user.email;
+    document.getElementById('detail-student-id').textContent = user.student_id || '未设置';
+    document.getElementById('detail-email').textContent = user.email || '未设置';
     document.getElementById('detail-major').textContent = user.major || '未设置';
     document.getElementById('detail-register-date').textContent = formatDate(user.created_at);
     document.getElementById('detail-last-active').textContent = user.last_active || '刚刚';
@@ -134,7 +158,7 @@ function renderUserTags(tags) {
     }
     
     tagsContainer.innerHTML = tags.map(tag => `
-        <span class="tag">${tag}</span>
+        <span class="tag-item">${tag}</span>
     `).join('');
 }
 
@@ -327,6 +351,9 @@ function switchTab(tabName) {
             break;
         case 'following':
             loadFollowing();
+            break;
+        case 'settings':
+            loadSettingsPage();
             break;
     }
 }
@@ -620,12 +647,6 @@ function setupProfileEventListeners() {
         });
     });
     
-    // 编辑资料按钮
-    const editProfileBtn = document.getElementById('edit-profile-btn');
-    if (editProfileBtn) {
-        editProfileBtn.addEventListener('click', showEditProfileModal);
-    }
-    
     // 关注按钮
     const followBtn = document.getElementById('follow-btn');
     if (followBtn) {
@@ -637,248 +658,6 @@ function setupProfileEventListeners() {
     if (messageBtn) {
         messageBtn.addEventListener('click', sendMessage);
     }
-    
-    // 模态框关闭按钮
-    const modalClose = document.querySelector('.modal-close');
-    if (modalClose) {
-        modalClose.addEventListener('click', closeModal);
-    }
-    
-    // 点击模态框背景关闭
-    window.addEventListener('click', function(e) {
-        if (e.target.classList.contains('modal')) {
-            closeModal();
-        }
-    });
-}
-
-// 显示编辑资料模态框
-function showEditProfileModal() {
-    const currentUser = getCurrentUser();
-    const modal = document.getElementById('edit-profile-modal');
-    const form = document.getElementById('edit-profile-form');
-    
-    if (!modal || !form) return;
-    
-    // 填充表单数据
-    form.innerHTML = `
-        <div class="modal-form">
-            <div class="form-group">
-                <label for="edit-nickname">昵称</label>
-                <input type="text" id="edit-nickname" value="${currentUser.nickname}" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="edit-bio">个人简介</label>
-                <textarea id="edit-bio" rows="3" maxlength="200">${currentUser.bio || ''}</textarea>
-                <div class="char-count">
-                    <span id="edit-bio-char-count">${(currentUser.bio || '').length}</span>/200
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="edit-major">专业</label>
-                <select id="edit-major">
-                    <option value="">请选择专业</option>
-                    <option value="计算机科学" ${currentUser.major === '计算机科学' ? 'selected' : ''}>计算机科学</option>
-                    <option value="软件工程" ${currentUser.major === '软件工程' ? 'selected' : ''}>软件工程</option>
-                    <option value="电子信息" ${currentUser.major === '电子信息' ? 'selected' : ''}>电子信息</option>
-                    <option value="金融" ${currentUser.major === '金融' ? 'selected' : ''}>金融</option>
-                    <option value="工商管理" ${currentUser.major === '工商管理' ? 'selected' : ''}>工商管理</option>
-                    <option value="其他" ${currentUser.major === '其他' ? 'selected' : ''}>其他</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="edit-email">邮箱</label>
-                <input type="email" id="edit-email" value="${currentUser.email}" required>
-            </div>
-            
-            <div class="form-group">
-                <label>兴趣标签</label>
-                <div class="tags-input-container">
-                    <input type="text" id="edit-tags-input" placeholder="添加标签（按回车确认）">
-                    <div class="selected-tags" id="edit-selected-tags">
-                        ${(currentUser.tags || []).map(tag => `
-                            <span class="tag">${tag}
-                                <span class="remove" onclick="removeEditTag('${tag}')">&times;</span>
-                            </span>
-                        `).join('')}
-                    </div>
-                </div>
-            </div>
-            
-            <div class="modal-actions">
-                <button type="button" class="btn btn-outline" onclick="closeModal()">取消</button>
-                <button type="submit" class="btn btn-primary">保存修改</button>
-            </div>
-        </div>
-    `;
-    
-    // 显示模态框
-    modal.style.display = 'flex';
-    
-    // 设置字符计数
-    const bioTextarea = form.querySelector('#edit-bio');
-    const charCount = form.querySelector('#edit-bio-char-count');
-    
-    if (bioTextarea && charCount) {
-        bioTextarea.addEventListener('input', function() {
-            charCount.textContent = this.value.length;
-        });
-    }
-    
-    // 设置标签输入
-    const tagsInput = form.querySelector('#edit-tags-input');
-    if (tagsInput) {
-        tagsInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                const tag = this.value.trim();
-                if (tag) {
-                    addEditTag(tag);
-                    this.value = '';
-                }
-            }
-        });
-    }
-    
-    // 处理表单提交
-    form.onsubmit = handleEditProfileSubmit;
-}
-
-// 处理编辑资料表单提交
-function handleEditProfileSubmit(e) {
-    e.preventDefault();
-    
-    const currentUser = getCurrentUser();
-    const users = JSON.parse(localStorage.getItem('campus_social_users') || '[]');
-    
-    // 获取表单数据
-    const nickname = document.getElementById('edit-nickname').value.trim();
-    const bio = document.getElementById('edit-bio').value.trim();
-    const major = document.getElementById('edit-major').value;
-    const email = document.getElementById('edit-email').value.trim();
-    
-    // 获取标签
-    const tags = Array.from(document.querySelectorAll('#edit-selected-tags .tag'))
-        .map(tag => tag.textContent.replace('×', '').trim());
-    
-    // 验证数据
-    if (!nickname) {
-        alert('昵称不能为空');
-        return;
-    }
-    
-    if (nickname.length > 20) {
-        alert('昵称不能超过20个字符');
-        return;
-    }
-    
-    if (!email) {
-        alert('邮箱不能为空');
-        return;
-    }
-    
-    // 检查昵称是否被其他人使用
-    const nicknameExists = users.some(u => 
-        u.id !== currentUser.id && u.nickname === nickname
-    );
-    
-    if (nicknameExists) {
-        alert('该昵称已被使用，请选择其他昵称');
-        return;
-    }
-    
-    // 更新用户数据
-    const updatedUser = {
-        ...currentUser,
-        nickname,
-        bio,
-        major,
-        email,
-        tags,
-        updated_at: new Date().toISOString()
-    };
-    
-    // 更新用户列表中的用户数据
-    const userIndex = users.findIndex(u => u.id === currentUser.id);
-    if (userIndex !== -1) {
-        users[userIndex] = updatedUser;
-        localStorage.setItem('campus_social_users', JSON.stringify(users));
-    }
-    
-    // 更新当前登录用户数据
-    localStorage.setItem('campus_social_current_user', JSON.stringify(updatedUser));
-    
-    // 更新动态中的用户名
-    updatePostsUsername(currentUser.id, nickname, currentUser.avatar);
-    
-    // 关闭模态框
-    closeModal();
-    
-    // 重新加载页面显示更新后的数据
-    location.reload();
-}
-
-// 添加编辑标签
-function addEditTag(tag) {
-    const container = document.getElementById('edit-selected-tags');
-    if (!container) return;
-    
-    // 检查是否已存在
-    const existingTags = Array.from(container.querySelectorAll('.tag'))
-        .map(t => t.textContent.replace('×', '').trim());
-    
-    if (existingTags.includes(tag)) {
-        return;
-    }
-    
-    const tagElement = document.createElement('span');
-    tagElement.className = 'tag';
-    tagElement.innerHTML = `
-        ${tag}
-        <span class="remove" onclick="removeEditTag('${tag}')">&times;</span>
-    `;
-    
-    container.appendChild(tagElement);
-}
-
-// 移除编辑标签
-function removeEditTag(tag) {
-    const container = document.getElementById('edit-selected-tags');
-    if (!container) return;
-    
-    const tagElement = Array.from(container.querySelectorAll('.tag'))
-        .find(t => t.textContent.includes(tag));
-    
-    if (tagElement) {
-        tagElement.remove();
-    }
-}
-
-// 更新动态中的用户名
-function updatePostsUsername(userId, newUsername, avatar) {
-    const posts = JSON.parse(localStorage.getItem('campus_social_posts') || '[]');
-    
-    posts.forEach(post => {
-        if (post.user_id === userId) {
-            post.username = newUsername;
-            if (avatar) {
-                post.avatar = avatar;
-            }
-        }
-    });
-    
-    localStorage.setItem('campus_social_posts', JSON.stringify(posts));
-}
-
-// 关闭模态框
-function closeModal() {
-    const modals = document.querySelectorAll('.modal');
-    modals.forEach(modal => {
-        modal.style.display = 'none';
-    });
 }
 
 // 关注/取消关注用户
@@ -1349,3 +1128,42 @@ function clearUserData() {
     showToast('个人数据已清除');
     location.reload();
 }
+
+// 页面加载完成后执行
+document.addEventListener('DOMContentLoaded', function() {
+    // 绑定输入框字符计数
+    const nicknameInput = document.getElementById('edit-nickname');
+    const bioInput = document.getElementById('edit-bio');
+    
+    if (nicknameInput) {
+        nicknameInput.addEventListener('input', function() {
+            const count = document.getElementById('nickname-count');
+            if (count) count.textContent = this.value.length;
+        });
+    }
+    
+    if (bioInput) {
+        bioInput.addEventListener('input', function() {
+            const count = document.getElementById('bio-count');
+            if (count) count.textContent = this.value.length;
+        });
+    }
+    
+    // 标签输入事件
+    const tagInput = document.getElementById('tag-input');
+    if (tagInput) {
+        tagInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const tag = this.value.trim();
+                if (tag) {
+                    // 调用profile-edit.js的函数
+                    if (typeof addTag === 'function') {
+                        addTag(tag);
+                    }
+                    this.value = '';
+                }
+            }
+        });
+    }
+});

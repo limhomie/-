@@ -69,6 +69,7 @@
                             <button type="button" class="toggle-password">
                                 <i class="fas fa-eye"></i>
                             </button>
+                        <div id="password-error" class="field-error" style="display: none;"></div>
                         </div>
                         <div class="password-strength" id="password-strength">
                             <div class="strength-bar"></div>
@@ -87,11 +88,12 @@
 
                     <div class="form-group">
                         <label for="reg-email">
-                            <i class="fas fa-envelope"></i> 邮箱 *
+                             <i class="fas fa-envelope"></i> 邮箱 *
                         </label>
                         <input type="email" id="reg-email" name="email" 
-                               placeholder="请输入邮箱" required>
+                             placeholder="请输入邮箱" required>
                         <div class="form-hint">用于找回密码和接收通知</div>
+                        <div id="email-error" class="field-error" style="display: none;"></div>
                     </div>
 
                     <div class="form-navigation">
@@ -135,6 +137,7 @@
                                placeholder="请设置一个昵称" required
                                maxlength="20">
                         <div class="form-hint">2-20个字符，支持中英文、数字</div>
+                        <div id="nickname-error" class="field-error" style="display: none;"></div>
                     </div>
 
                     <div class="form-group">
