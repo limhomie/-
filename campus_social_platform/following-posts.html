@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>深大校园圈 - 关注动态</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/home.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-left">
+          <a href="index.html" class="logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span>深大校园圈</span>
+          </a>
+          <div class="nav-menu">
+            <a href="index.html" class="nav-item"
+              ><i class="fas fa-home"></i> 首页</a
+            >
+            <a href="index.html#hot" class="nav-item"
+              ><i class="fas fa-fire"></i> 热门</a
+            >
+            <a href="post-edit.html" class="nav-item" id="publish-btn"
+              ><i class="fas fa-plus"></i> 发布</a
+            >
+            <a
+              href="following-posts.html"
+              class="nav-item active"
+              id="following-tab"
+            >
+              <i class="fas fa-user-friends"></i> 关注
+            </a>
+          </div>
+        </div>
+        <div class="nav-right">
+          <div class="search-box">
+            <input type="text" placeholder="搜索动态或用户..." />
+            <button><i class="fas fa-search"></i></button>
+          </div>
+          <div class="auth-buttons" id="auth-buttons">
+            <a href="login.html" class="btn btn-outline">登录</a>
+            <a href="register.html" class="btn btn-primary">注册</a>
+          </div>
+          <div class="user-menu" id="user-menu" style="display: none">
+            <img
+              src="images/default-avatar.png"
+              alt="头像"
+              class="user-avatar"
+            />
+            <span class="user-name">用户名</span>
+            <div class="dropdown-menu">
+              <a href="profile.html"><i class="fas fa-user"></i> 个人主页</a>
+              <a href="profile.html?tab=posts"
+                ><i class="fas fa-edit"></i> 我的动态</a
+              >
+              <a href="post-edit.html"><i class="fas fa-plus"></i> 发布动态</a>
+              <hr />
+              <a href="#" id="logout-btn"
+                ><i class="fas fa-sign-out-alt"></i> 退出登录</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- 内容区域 -->
+    <div class="container">
+      <div class="main-content">
+        <!-- 关注动态标题 -->
+        <div class="welcome-banner">
+          <h1>关注用户的动态</h1>
+          <p>查看你关注用户的最新分享</p>
+        </div>
+
+        <!-- 动态列表 -->
+        <div class="posts-feed" id="posts-feed">
+          <!-- 加载提示 -->
+          <div class="loading-state">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>加载关注的动态中...</p>
+          </div>
+
+          <!-- 空状态（无关注内容时显示） -->
+          <div class="empty-state" id="empty-following" style="display: none">
+            <i class="fas fa-users"></i>
+            <p>还没有关注任何人</p>
+            <a href="index.html" class="btn btn-primary">去关注一些用户吧</a>
+          </div>
+        </div>
+
+        <!-- 加载更多 -->
+        <div class="load-more">
+          <button id="load-more-btn" class="btn btn-outline">
+            <i class="fas fa-sync-alt"></i> 加载更多动态
+          </button>
+        </div>
+      </div>
+
+      <!-- 侧边栏 -->
+      <div class="sidebar">
+        <!-- 热门话题 -->
+        <div class="sidebar-card">
+          <h3><i class="fas fa-hashtag"></i> 热门话题</h3>
+          <ul class="topic-list">
+            <li>
+              <a href="#">#深大美食探店</a> <span class="topic-count">128</span>
+            </li>
+            <li>
+              <a href="#">#图书馆自习打卡</a>
+              <span class="topic-count">95</span>
+            </li>
+            <li>
+              <a href="#">#社团招新</a> <span class="topic-count">87</span>
+            </li>
+            <li>
+              <a href="#">#校园风景</a> <span class="topic-count">76</span>
+            </li>
+            <li>
+              <a href="#">#选课交流</a> <span class="topic-count">64</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 推荐关注 -->
+        <div class="sidebar-card">
+          <h3><i class="fas fa-user-plus"></i> 推荐关注</h3>
+          <div class="suggested-users" id="suggested-users">
+            <!-- 推荐用户列表将通过JS动态生成 -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>深大校园圈</h4>
+          <p>深圳大学校园生活交友平台</p>
+          <p>© 2025 深圳大学. 保留所有权利.</p>
+        </div>
+        <div class="footer-section">
+          <h4>联系我们</h4>
+          <p>邮箱: campus@szu.edu.cn</p>
+          <p>电话: 0755-2653-XXXX</p>
+        </div>
+        <div class="footer-section">
+          <h4>使用条款</h4>
+          <a href="#">用户协议</a>
+          <a href="#">隐私政策</a>
+          <a href="#">社区准则</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script src="js/posts.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+      // 页面加载时初始化
+      document.addEventListener("DOMContentLoaded", function () {
+        // 封装通用的获取当前用户函数（复用首页逻辑，避免重复代码）
+        function getCurrentUser() {
+          try {
+            // 优先从localStorage获取，其次sessionStorage
+            const localUser = localStorage.getItem(
+              "campus_social_current_user"
+            );
+            const sessionUser = sessionStorage.getItem(
+              "campus_social_current_user"
+            );
+
+            // 有任意一个存在则解析
+            const userData = localUser || sessionUser;
+            if (!userData) return null;
+
+            // 解析用户数据（严格校验格式）
+            const user = JSON.parse(userData);
+            // 基础校验：必须包含id字段（用户唯一标识）
+            if (user && user.id) {
+              return user;
+            } else {
+              // 数据格式不完整，清除无效数据
+              localStorage.removeItem("campus_social_current_user");
+              sessionStorage.removeItem("campus_social_current_user");
+              return null;
+            }
+          } catch (error) {
+            // 解析失败，清除损坏的用户数据
+            localStorage.removeItem("campus_social_current_user");
+            sessionStorage.removeItem("campus_social_current_user");
+            console.error("获取用户数据失败:", error);
+            return null;
+          }
+        }
+
+        // 获取当前登录用户
+        const currentUser = getCurrentUser();
+
+        // 1. 未登录状态处理（仅此时跳转）
+        if (!currentUser) {
+          // 避免重复触发跳转（添加防抖）
+          if (!window.loginRedirected) {
+            window.loginRedirected = true;
+            showToast("请先登录查看关注动态");
+            setTimeout(() => {
+              // 跳转时保留来源页，方便登录后返回
+              window.location.href = `login.html?redirect=${encodeURIComponent(
+                window.location.href
+              )}`;
+            }, 1500);
+          }
+          return;
+        }
+
+        function loadSuggestedUsers(currentUserId) {
+          const suggestedContainer = document.getElementById("suggested-users");
+          // 容器不存在则直接返回，避免报错
+          if (!suggestedContainer) {
+            console.warn("推荐用户容器未找到");
+            return;
+          }
+        }
+
+        // 2. 已登录 - 显示用户菜单，隐藏登录按钮
+        try {
+          const authButtons = document.getElementById("auth-buttons");
+          const userMenu = document.getElementById("user-menu");
+
+          if (authButtons) authButtons.style.display = "none";
+          if (userMenu) {
+            userMenu.style.display = "flex";
+
+            // 更新用户名和头像（添加空值保护）
+            const userNameSpan = userMenu.querySelector(".user-name");
+            const userAvatar = userMenu.querySelector(".user-avatar");
+
+            if (userNameSpan) {
+              userNameSpan.textContent =
+                currentUser.nickname || currentUser.student_id || "深大用户";
+            }
+
+            if (userAvatar) {
+              // 优先使用用户头像，失败则用默认头像
+              userAvatar.src =
+                currentUser.avatar || "images/default-avatar.png";
+              userAvatar.onerror = () => {
+                userAvatar.src = "images/default-avatar.png";
+              };
+            }
+          }
+
+          // 3. 初始化页面数据
+          updateSidebarUserInfo(currentUser); // 更新侧边栏用户信息
+          loadFollowingPosts(currentUser); // 加载关注动态
+          loadSuggestedUsers(currentUser.id); // 加载推荐用户
+        } catch (initError) {
+          // 初始化失败仅提示，不强制跳转登录（避免误判）
+          console.error("页面初始化失败:", initError);
+          showToast("页面加载异常，请刷新重试");
+        }
+      });
+
+      // 更新侧边栏用户信息
+      function updateSidebarUserInfo(user) {
+        const usernameEl = document.getElementById("sidebar-username");
+        const bioEl = document.getElementById("sidebar-bio");
+        const postsEl = document.getElementById("sidebar-posts");
+        const followingEl = document.getElementById("sidebar-following");
+        const followersEl = document.getElementById("sidebar-followers");
+        const avatarEl = document.querySelector("#user-info-card .user-avatar");
+
+        if (usernameEl)
+          usernameEl.textContent = user.nickname || user.student_id;
+        if (bioEl) bioEl.textContent = user.bio || "这家伙很懒，什么都没写";
+        if (avatarEl && user.avatar) {
+          avatarEl.src = user.avatar;
+          avatarEl.onerror = () => (avatarEl.src = "images/default-avatar.png");
+        }
+
+        // 获取用户动态数量
+        const allPosts = JSON.parse(
+          localStorage.getItem("campus_social_posts") || "[]"
+        );
+        const userPosts = allPosts.filter((post) => post.user_id === user.id);
+        if (postsEl) postsEl.textContent = userPosts.length;
+
+        // 获取关注和粉丝数量
+        const follows = JSON.parse(
+          localStorage.getItem("campus_social_follows") || "[]"
+        );
+        const followingCount = follows.filter(
+          (f) => f.follower_id === user.id
+        ).length;
+        const followerCount = follows.filter(
+          (f) => f.following_id === user.id
+        ).length;
+
+        if (followingEl) followingEl.textContent = followingCount;
+        if (followersEl) followersEl.textContent = followerCount;
+      }
+
+      // 加载关注用户的动态
+      function loadFollowingPosts(currentUser) {
+        const postsFeed = document.getElementById("posts-feed");
+        const emptyState = document.getElementById("empty-following");
+
+        // 获取关注关系
+        const follows = JSON.parse(
+          localStorage.getItem("campus_social_follows") || "[]"
+        );
+        const followingIds = follows
+          .filter((f) => f.follower_id === currentUser.id)
+          .map((f) => f.following_id);
+
+        // 如果没有关注任何人
+        if (followingIds.length === 0) {
+          postsFeed.innerHTML = "";
+          emptyState.style.display = "flex";
+          return;
+        }
+
+        // 获取并筛选帖子（只显示关注用户的帖子）
+        let allPosts = JSON.parse(
+          localStorage.getItem("campus_social_posts") || "[]"
+        );
+        const followingPosts = allPosts
+          .filter((post) => followingIds.includes(post.user_id))
+          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+        // 渲染帖子
+        if (followingPosts.length === 0) {
+          postsFeed.innerHTML = `
+              <div class="empty-state">
+                <i class="fas fa-newspaper"></i>
+                <p>你关注的用户还没有发布动态</p>
+              </div>
+            `;
+        } else {
+          // 复用posts.js中的渲染函数
+          renderPosts(followingPosts);
+        }
+      }
+
+      // 加载推荐用户
+      function loadSuggestedUsers(currentUserId) {
+        const suggestedContainer = document.getElementById("suggested-users");
+        if (!suggestedContainer) return;
+
+        // 获取所有用户和已关注用户
+        const allUsers = JSON.parse(
+          localStorage.getItem("campus_social_users") || "[]"
+        );
+        const follows = JSON.parse(
+          localStorage.getItem("campus_social_follows") || "[]"
+        );
+        const followingIds = follows
+          .filter((f) => f.follower_id === currentUserId)
+          .map((f) => f.following_id);
+
+        // 筛选出不是自己且未关注的用户作为推荐
+        const suggestedUsers = allUsers
+          .filter(
+            (user) =>
+              user.id !== currentUserId && !followingIds.includes(user.id)
+          )
+          .slice(0, 5); // 只显示前5个推荐
+
+        if (suggestedUsers.length > 0) {
+          suggestedContainer.innerHTML = suggestedUsers
+            .map(
+              (user) => `
+            <div class="suggested-user">
+              <img src="${user.avatar || "images/default-avatar.png"}" alt="${
+                user.nickname
+              }" class="suggested-avatar">
+              <div class="suggested-info">
+                <h4>${user.nickname}</h4>
+                <p>${user.student_id}</p>
+              </div>
+              <button class="btn btn-outline follow-btn" data-user-id="${
+                user.id
+              }">
+                <i class="fas fa-user-plus"></i> 关注
+              </button>
+            </div>
+          `
+            )
+            .join("");
+
+          // 为关注按钮添加事件
+          document.querySelectorAll(".follow-btn").forEach((btn) => {
+            btn.addEventListener("click", function () {
+              const userId = this.getAttribute("data-user-id");
+              followUser(currentUserId, userId);
+              this.innerHTML = '<i class="fas fa-check"></i> 已关注';
+              this.disabled = true;
+              this.classList.add("followed");
+            });
+          });
+        } else {
+          suggestedContainer.innerHTML =
+            '<p class="no-suggestions">暂无推荐用户</p>';
+        }
+      }
+
+      // 关注用户功能
+      function followUser(followerId, followingId) {
+        const follows = JSON.parse(
+          localStorage.getItem("campus_social_follows") || "[]"
+        );
+        // 检查是否已关注
+        const isAlreadyFollowing = follows.some(
+          (f) => f.follower_id === followerId && f.following_id === followingId
+        );
+
+        if (!isAlreadyFollowing) {
+          follows.push({
+            id: Date.now().toString(),
+            follower_id: followerId,
+            following_id: followingId,
+            created_at: new Date().toISOString(),
+          });
+          localStorage.setItem(
+            "campus_social_follows",
+            JSON.stringify(follows)
+          );
+          showToast("关注成功");
+          // 重新加载关注动态
+          const currentUser = JSON.parse(
+            localStorage.getItem("campus_social_current_user") ||
+              sessionStorage.getItem("campus_social_current_user")
+          );
+          loadFollowingPosts(currentUser);
+          updateSidebarUserInfo(currentUser);
+        }
+      }
+    </script>
+  </body>
+</html>
