@@ -1,224 +1,270 @@
 <!-- 首页（index.html） - 普通游客可浏览 -->
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>深大校园圈 - 校园生活交友平台</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/home.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/home.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
     <!-- 导航栏 -->
     <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-left">
-                <a href="index.html" class="logo">
-                    <i class="fas fa-graduation-cap"></i>
-                    <span>深大校园圈</span>
-                </a>
-                <div class="nav-menu">
-                    <a href="index.html" class="nav-item active"><i class="fas fa-home"></i> 首页</a>
-                    <a href="#hot" class="nav-item"><i class="fas fa-fire"></i> 热门</a>
-                    <a href="#following" class="nav-item" id="following-tab" style="display:none;">
-                        <i class="fas fa-user-friends"></i> 关注
-                    </a>
-                </div>
-            </div>
-            <div class="nav-right">
-                <div class="search-box">
-                    <input type="text" placeholder="搜索动态或用户...">
-                    <button><i class="fas fa-search"></i></button>
-                </div>
-                <div class="auth-buttons" id="auth-buttons">
-                    <a href="login.html" class="btn btn-outline">登录</a>
-                    <a href="register.html" class="btn btn-primary">注册</a>
-                </div>
-                <div class="user-menu" id="user-menu" style="display:none;">
-                    <img src="images/default-avatar.png" alt="头像" class="user-avatar">
-                    <span class="user-name">用户名</span>
-                    <div class="dropdown-menu">
-                        <a href="profile.html"><i class="fas fa-user"></i> 个人主页</a>
-                        <a href="profile.html?tab=posts"><i class="fas fa-edit"></i> 我的动态</a>
-                        <a href="post-edit.html"><i class="fas fa-plus"></i> 发布动态</a>
-                        <hr>
-                        <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> 退出登录</a>
-                    </div>
-                </div>
-            </div>
+      <div class="nav-container">
+        <div class="nav-left">
+          <a href="index.html" class="logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span>深大校园圈</span>
+          </a>
+          <div class="nav-menu">
+            <a href="index.html" class="nav-item active"
+              ><i class="fas fa-home"></i> 首页</a
+            >
+            <a href="#hot" class="nav-item"><i class="fas fa-fire"></i> 热门</a>
+            <a href="#publish" class="nav-item" id="publish-btn"
+              ><i class="fas fa-plus"></i> 发布</a
+            >
+            <a
+              href="#following"
+              class="nav-item"
+              id="following-tab"
+              style="display: none"
+            >
+              <i class="fas fa-user-friends"></i> 关注
+            </a>
+          </div>
         </div>
+        <div class="nav-right">
+          <div class="search-box">
+            <input type="text" placeholder="搜索动态或用户..." />
+            <button><i class="fas fa-search"></i></button>
+          </div>
+          <div class="auth-buttons" id="auth-buttons">
+            <a href="login.html" class="btn btn-outline">登录</a>
+            <a href="register.html" class="btn btn-primary">注册</a>
+          </div>
+          <div class="user-menu" id="user-menu" style="display: none">
+            <img
+              src="images/default-avatar.png"
+              alt="头像"
+              class="user-avatar"
+            />
+            <span class="user-name">用户名</span>
+            <div class="dropdown-menu">
+              <a href="profile.html"><i class="fas fa-user"></i> 个人主页</a>
+              <a href="profile.html?tab=posts"
+                ><i class="fas fa-edit"></i> 我的动态</a
+              >
+              <a href="post-edit.html"><i class="fas fa-plus"></i> 发布动态</a>
+              <hr />
+              <a href="#" id="logout-btn"
+                ><i class="fas fa-sign-out-alt"></i> 退出登录</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
     </nav>
 
     <!-- 内容区域 -->
     <div class="container">
-        <div class="main-content">
-            <!-- 欢迎横幅 -->
-            <div class="welcome-banner">
-                <h1>欢迎来到深大校园圈</h1>
-                <p>分享校园生活，结交知心朋友</p>
-                <div class="stats">
-                    <span><i class="fas fa-users"></i> 今日活跃: <span id="active-users">1523</span></span>
-                    <span><i class="fas fa-comments"></i> 今日动态: <span id="today-posts">89</span></span>
-                </div>
-            </div>
-
-            <!-- 动态筛选 -->
-            <div class="feed-filter">
-                <button class="filter-btn active" data-filter="all">全部动态</button>
-                <button class="filter-btn" data-filter="popular">热门推荐</button>
-                <button class="filter-btn" id="filter-following" data-filter="following" style="display:none;">
-                    关注的人
-                </button>
-            </div>
-
-            <!-- 动态列表 -->
-            <div class="posts-feed" id="posts-feed">
-                <!-- 动态卡片将通过JS动态生成 -->
-            </div>
-
-            <!-- 加载更多 -->
-            <div class="load-more">
-                <button id="load-more-btn" class="btn btn-outline">
-                    <i class="fas fa-sync-alt"></i> 加载更多动态
-                </button>
-            </div>
+      <div class="main-content">
+        <!-- 欢迎横幅 -->
+        <div class="welcome-banner">
+          <h1>欢迎来到深大校园圈</h1>
+          <p>分享校园生活，结交知心朋友</p>
+          <div class="stats">
+            <span
+              ><i class="fas fa-users"></i> 今日活跃:
+              <span id="active-users">1523</span></span
+            >
+            <span
+              ><i class="fas fa-comments"></i> 今日动态:
+              <span id="today-posts">89</span></span
+            >
+          </div>
         </div>
 
-        <!-- 侧边栏 -->
-        <div class="sidebar">
-            <!-- 登录提示（游客可见） -->
-            <div class="sidebar-card" id="login-prompt">
-                <h3><i class="fas fa-sign-in-alt"></i> 加入校园圈</h3>
-                <p>注册账号，解锁更多功能：发布动态、点赞评论、关注好友</p>
-                <div class="card-actions">
-                    <a href="register.html" class="btn btn-primary">立即注册</a>
-                    <a href="login.html" class="btn btn-outline">已有账号</a>
-                </div>
-            </div>
-
-            <!-- 热门话题 -->
-            <div class="sidebar-card">
-                <h3><i class="fas fa-hashtag"></i> 热门话题</h3>
-                <ul class="topic-list">
-                    <li><a href="#">#深大美食探店</a> <span class="topic-count">128</span></li>
-                    <li><a href="#">#图书馆自习打卡</a> <span class="topic-count">95</span></li>
-                    <li><a href="#">#社团招新</a> <span class="topic-count">87</span></li>
-                    <li><a href="#">#校园风景</a> <span class="topic-count">76</span></li>
-                    <li><a href="#">#选课交流</a> <span class="topic-count">64</span></li>
-                </ul>
-            </div>
-
-            <!-- 活跃用户 -->
-            <div class="sidebar-card">
-                <h3><i class="fas fa-crown"></i> 今日活跃用户</h3>
-                <div class="active-users-list">
-                    <!-- 用户卡片将通过JS动态生成 -->
-                </div>
-            </div>
+        <!-- 动态筛选 -->
+        <div class="feed-filter">
+          <button class="filter-btn active" data-filter="all">全部动态</button>
+          <button class="filter-btn" data-filter="popular">热门推荐</button>
+          <button
+            class="filter-btn"
+            id="filter-following"
+            data-filter="following"
+            style="display: none"
+          >
+            关注的人
+          </button>
         </div>
+
+        <!-- 动态列表 -->
+        <div class="posts-feed" id="posts-feed">
+          <!-- 动态卡片将通过JS动态生成 -->
+        </div>
+
+        <!-- 加载更多 -->
+        <div class="load-more">
+          <button id="load-more-btn" class="btn btn-outline">
+            <i class="fas fa-sync-alt"></i> 加载更多动态
+          </button>
+        </div>
+      </div>
+
+      <!-- 侧边栏 -->
+      <div class="sidebar">
+        <!-- 登录提示（游客可见） -->
+        <div class="sidebar-card" id="login-prompt">
+          <h3><i class="fas fa-sign-in-alt"></i> 加入校园圈</h3>
+          <p>注册账号，解锁更多功能：发布动态、点赞评论、关注好友</p>
+          <div class="card-actions">
+            <a href="register.html" class="btn btn-primary">立即注册</a>
+            <a href="login.html" class="btn btn-outline">已有账号</a>
+          </div>
+        </div>
+
+        <!-- 热门话题 -->
+        <div class="sidebar-card">
+          <h3><i class="fas fa-hashtag"></i> 热门话题</h3>
+          <ul class="topic-list">
+            <li>
+              <a href="#">#深大美食探店</a> <span class="topic-count">128</span>
+            </li>
+            <li>
+              <a href="#">#图书馆自习打卡</a>
+              <span class="topic-count">95</span>
+            </li>
+            <li>
+              <a href="#">#社团招新</a> <span class="topic-count">87</span>
+            </li>
+            <li>
+              <a href="#">#校园风景</a> <span class="topic-count">76</span>
+            </li>
+            <li>
+              <a href="#">#选课交流</a> <span class="topic-count">64</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 活跃用户 -->
+        <div class="sidebar-card">
+          <h3><i class="fas fa-crown"></i> 今日活跃用户</h3>
+          <div class="active-users-list">
+            <!-- 用户卡片将通过JS动态生成 -->
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- 页脚 -->
     <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>深大校园圈</h4>
-                <p>深圳大学校园生活交友平台</p>
-                <p>© 2025 深圳大学. 保留所有权利.</p>
-            </div>
-            <div class="footer-section">
-                <h4>联系我们</h4>
-                <p>邮箱: campus@szu.edu.cn</p>
-                <p>电话: 0755-2653-XXXX</p>
-            </div>
-            <div class="footer-section">
-                <h4>使用条款</h4>
-                <a href="#">用户协议</a>
-                <a href="#">隐私政策</a>
-                <a href="#">社区准则</a>
-            </div>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>深大校园圈</h4>
+          <p>深圳大学校园生活交友平台</p>
+          <p>© 2025 深圳大学. 保留所有权利.</p>
         </div>
+        <div class="footer-section">
+          <h4>联系我们</h4>
+          <p>邮箱: campus@szu.edu.cn</p>
+          <p>电话: 0755-2653-XXXX</p>
+        </div>
+        <div class="footer-section">
+          <h4>使用条款</h4>
+          <a href="#">用户协议</a>
+          <a href="#">隐私政策</a>
+          <a href="#">社区准则</a>
+        </div>
+      </div>
     </footer>
     <script>
-// 页面加载时立即检查登录状态
-document.addEventListener('DOMContentLoaded', function() {
-    // 检查是否有登录用户
-    const userData = localStorage.getItem('campus_social_current_user') || 
-                     sessionStorage.getItem('campus_social_current_user');
-    
-    if (userData) {
-        try {
+      // 页面加载时立即检查登录状态
+      document.addEventListener("DOMContentLoaded", function () {
+        // 检查是否有登录用户
+        const userData =
+          localStorage.getItem("campus_social_current_user") ||
+          sessionStorage.getItem("campus_social_current_user");
+
+        if (userData) {
+          try {
             const currentUser = JSON.parse(userData);
-            
+
             // 隐藏登录注册按钮
-            const authButtons = document.getElementById('auth-buttons');
-            if (authButtons) authButtons.style.display = 'none';
-            
+            const authButtons = document.getElementById("auth-buttons");
+            if (authButtons) authButtons.style.display = "none";
+
             // 显示用户菜单
-            const userMenu = document.getElementById('user-menu');
+            const userMenu = document.getElementById("user-menu");
             if (userMenu) {
-                userMenu.style.display = 'flex';
-                
-                // 更新用户名
-                const userNameSpan = userMenu.querySelector('.user-name');
-                if (userNameSpan) {
-                    userNameSpan.textContent = currentUser.nickname || currentUser.student_id || '用户';
-                }
-                
-                // 更新头像
-                const userAvatar = userMenu.querySelector('.user-avatar');
-                if (userAvatar && currentUser.avatar) {
-                    userAvatar.src = currentUser.avatar;
-                    userAvatar.onerror = function() {
-                        this.src = 'images/default-avatar.png';
-                    };
-                }
-                
-                // 添加点击跳转
-                userAvatar.style.cursor = 'pointer';
-                userAvatar.addEventListener('click', function() {
-                    window.location.href = `profile.html?id=${currentUser.id}`;
-                });
+              userMenu.style.display = "flex";
+
+              // 更新用户名
+              const userNameSpan = userMenu.querySelector(".user-name");
+              if (userNameSpan) {
+                userNameSpan.textContent =
+                  currentUser.nickname || currentUser.student_id || "用户";
+              }
+
+              // 更新头像
+              const userAvatar = userMenu.querySelector(".user-avatar");
+              if (userAvatar && currentUser.avatar) {
+                userAvatar.src = currentUser.avatar;
+                userAvatar.onerror = function () {
+                  this.src = "images/default-avatar.png";
+                };
+              }
+
+              // 添加点击跳转
+              userAvatar.style.cursor = "pointer";
+              userAvatar.addEventListener("click", function () {
+                window.location.href = `profile.html?id=${currentUser.id}`;
+              });
             }
-            
+
             // 显示关注相关标签
-            const followingTab = document.getElementById('following-tab');
-            const filterFollowing = document.getElementById('filter-following');
-            if (followingTab) followingTab.style.display = 'flex';
-            if (filterFollowing) filterFollowing.style.display = 'block';
-            
+            const followingTab = document.getElementById("following-tab");
+            const filterFollowing = document.getElementById("filter-following");
+            if (followingTab) followingTab.style.display = "flex";
+            if (filterFollowing) filterFollowing.style.display = "block";
+
             // 如果是管理员，添加管理面板链接
             if (currentUser.is_admin) {
-                const navMenu = document.querySelector('.nav-menu');
-                if (navMenu) {
-                    const existingAdminLink = navMenu.querySelector('a[href="admin.html"]');
-                    if (!existingAdminLink) {
-                        const adminLink = document.createElement('a');
-                        adminLink.href = 'admin.html';
-                        adminLink.className = 'nav-item';
-                        adminLink.innerHTML = '<i class="fas fa-cogs"></i> 管理面板';
-                        navMenu.appendChild(adminLink);
-                    }
+              const navMenu = document.querySelector(".nav-menu");
+              if (navMenu) {
+                const existingAdminLink = navMenu.querySelector(
+                  'a[href="admin.html"]'
+                );
+                if (!existingAdminLink) {
+                  const adminLink = document.createElement("a");
+                  adminLink.href = "admin.html";
+                  adminLink.className = "nav-item";
+                  adminLink.innerHTML = '<i class="fas fa-cogs"></i> 管理面板';
+                  navMenu.appendChild(adminLink);
                 }
+              }
             }
-            
+
             // 隐藏游客登录提示
-            const loginPrompt = document.getElementById('login-prompt');
+            const loginPrompt = document.getElementById("login-prompt");
             if (loginPrompt) {
-                loginPrompt.style.display = 'none';
+              loginPrompt.style.display = "none";
             }
-            
-            console.log('页面加载时检测到已登录用户:', currentUser.nickname);
-            
-        } catch (error) {
-            console.error('解析用户数据时出错:', error);
+
+            console.log("页面加载时检测到已登录用户:", currentUser.nickname);
+          } catch (error) {
+            console.error("解析用户数据时出错:", error);
+          }
         }
-    }
-});
-</script>
+      });
+    </script>
     <script src="js/app.js"></script>
     <script src="js/posts.js"></script>
     <script src="js/auth.js"></script>
-</body>
+  </body>
 </html>

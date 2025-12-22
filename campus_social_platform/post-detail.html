@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>动态详情 - 深大校园圈</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/home.css" />
+    <link rel="stylesheet" href="css/post-detail.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <div
+          style="
+            padding: 10px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+          "
+        >
+          <button
+            id="back-btn"
+            style="
+              padding: 8px 16px;
+              background: #f5f5f5;
+              border: 1px solid #ddd;
+              border-radius: 4px;
+              cursor: pointer;
+            "
+          >
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <a href="index.html" class="logo"
+            ><i class="fas fa-graduation-cap"></i><span></span
+          ></a>
+          <h2 style="margin: 0">深大校园圈</h2>
+        </div>
+        <div class="nav-left"></div>
+        <div class="nav-right" id="user-menu"></div>
+      </div>
+    </nav>
+
+    <div class="container detail-container">
+      <main class="post-main">
+        <div id="post-content-target">
+          <div class="loading">加载中...</div>
+        </div>
+
+        <section class="comments-section">
+          <h3>评论 (<span id="comment-count">0</span>)</h3>
+
+          <div class="comment-input-area">
+            <img
+              src="img/default-avatar.png"
+              class="user-avatar"
+              id="current-user-avatar"
+            />
+            <div class="input-wrapper">
+              <textarea
+                id="comment-textarea"
+                placeholder="写下你的评论..."
+              ></textarea>
+              <button id="submit-comment" class="btn btn-primary">发布</button>
+            </div>
+          </div>
+
+          <div id="comments-list"></div>
+        </section>
+      </main>
+
+      <aside class="post-sidebar">
+        <div class="sidebar-card user-info-card" id="author-info"></div>
+      </aside>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/posts.js"></script>
+    <script src="js/post-detail.js"></script>
+  </body>
+</html>

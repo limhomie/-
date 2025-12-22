@@ -1,321 +1,379 @@
 <!-- 创建个人主页（profile.html） -->
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>个人主页 - 深大校园圈</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/profile.css">
-    <link rel="stylesheet" href="css/modal.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/profile.css" />
+    <link rel="stylesheet" href="css/modal.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
     <!-- 导航栏（复用index.html的导航） -->
     <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-left">
-                <a href="index.html" class="logo">
-                    <i class="fas fa-graduation-cap"></i>
-                    <span>深大校园圈</span>
-                </a>
-                <div class="nav-menu">
-                    <a href="index.html" class="nav-item"><i class="fas fa-home"></i> 首页</a>
-                    <a href="#hot" class="nav-item"><i class="fas fa-fire"></i> 热门</a>
-                    <a href="post-edit.html" class="nav-item"><i class="fas fa-plus"></i> 发布动态</a>
-                </div>
-            </div>
-            <div class="nav-right">
-                <div class="search-box">
-                    <input type="text" placeholder="搜索动态或用户...">
-                    <button><i class="fas fa-search"></i></button>
-                </div>
-                <div class="user-menu" id="user-menu">
-                    <!-- 由JS动态填充 -->
-                </div>
-            </div>
+      <div class="nav-container">
+        <div class="nav-left">
+          <a href="index.html" class="logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span>深大校园圈</span>
+          </a>
+          <div class="nav-menu">
+            <a href="index.html" class="nav-item"
+              ><i class="fas fa-home"></i> 首页</a
+            >
+            <a href="#hot" class="nav-item"><i class="fas fa-fire"></i> 热门</a>
+            <a href="publish.html" class="nav-item"
+              ><i class="fas fa-plus"></i> 发布</a
+            >
+            <a
+              href="#following"
+              class="nav-item"
+              id="following-tab"
+              style="display: none"
+            >
+              <i class="fas fa-user-friends"></i> 关注
+            </a>
+          </div>
         </div>
+        <div class="nav-right">
+          <div class="search-box">
+            <input type="text" placeholder="搜索动态或用户..." />
+            <button><i class="fas fa-search"></i></button>
+          </div>
+          <div class="user-menu" id="user-menu">
+            <!-- 由JS动态填充 -->
+          </div>
+        </div>
+      </div>
     </nav>
 
     <!-- 个人主页内容 -->
     <div class="profile-container">
-        <!-- 个人信息卡片 -->
-        <div class="profile-card">
-            <div class="profile-header">
-                <!-- 背景封面 -->
-                <div class="profile-cover" id="profile-cover">
-                    <button class="edit-cover-btn" id="edit-cover-btn">
-                        <i class="fas fa-camera"></i> 更换封面
-                    </button>
-                </div>
-                
-                <!-- 头像和基本信息 -->
-                <div class="profile-info">
-                    <div class="profile-avatar-container">
-                        <img src="images/default-avatar.png" alt="头像" class="profile-avatar" id="profile-avatar">
-                        <button class="edit-avatar-btn" id="edit-avatar-btn">
-                            <i class="fas fa-camera"></i>
-                        </button>
-                    </div>
-                    
-                    <div class="profile-details">
-                        <h1 class="profile-name" id="profile-name">用户名</h1>
-                        <p class="profile-bio" id="profile-bio">个人简介...</p>
-                        
-                        <div class="profile-stats">
-                            <div class="stat-item">
-                                <strong id="follower-count">0</strong>
-                                <span>粉丝</span>
-                            </div>
-                            <div class="stat-item">
-                                <strong id="following-count">0</strong>
-                                <span>关注</span>
-                            </div>
-                            <div class="stat-item">
-                                <strong id="post-count">0</strong>
-                                <span>动态</span>
-                            </div>
-                            <div class="stat-item">
-                                <strong id="like-count">0</strong>
-                                <span>获赞</span>
-                            </div>
-                        </div>
-                        
-                        <div class="profile-actions">
-                            <button class="btn btn-primary" id="follow-btn" style="display: none;">
-                                <i class="fas fa-user-plus"></i> 关注
-                            </button>
-                            <button class="btn btn-outline" id="message-btn" style="display: none;">
-                                <i class="fas fa-envelope"></i> 私信
-                            </button>
-                            <button class="btn btn-outline" id="edit-profile-btn">
-                                <i class="fas fa-edit"></i> 编辑资料
-                            </button>
-                        </div>
-                    </div>
-                </div>
+      <!-- 个人信息卡片 -->
+      <div class="profile-card">
+        <div class="profile-header">
+          <!-- 背景封面 -->
+          <div class="profile-cover" id="profile-cover">
+            <button class="edit-cover-btn" id="edit-cover-btn">
+              <i class="fas fa-camera"></i> 更换封面
+            </button>
+          </div>
+
+          <!-- 头像和基本信息 -->
+          <div class="profile-info">
+            <div class="profile-avatar-container">
+              <img
+                src="images/default-avatar.png"
+                alt="头像"
+                class="profile-avatar"
+                id="profile-avatar"
+              />
+              <button class="edit-avatar-btn" id="edit-avatar-btn">
+                <i class="fas fa-camera"></i>
+              </button>
             </div>
-            
-            <!-- 用户详情 -->
-            <div class="profile-details-grid">
-                <div class="detail-item">
-                    <i class="fas fa-id-card"></i>
-                    <div>
-                        <span class="detail-label">学号</span>
-                        <span class="detail-value" id="detail-student-id">2023000000</span>
-                    </div>
+
+            <div class="profile-details">
+              <h1 class="profile-name" id="profile-name">用户名</h1>
+              <p class="profile-bio" id="profile-bio">个人简介...</p>
+
+              <div class="profile-stats">
+                <div class="stat-item">
+                  <strong id="follower-count">0</strong>
+                  <span>粉丝</span>
                 </div>
-                <div class="detail-item">
-                    <i class="fas fa-envelope"></i>
-                    <div>
-                        <span class="detail-label">邮箱</span>
-                        <span class="detail-value" id="detail-email">example@szu.edu.cn</span>
-                    </div>
+                <div class="stat-item">
+                  <strong id="following-count">0</strong>
+                  <span>关注</span>
                 </div>
-                <div class="detail-item">
-                    <i class="fas fa-graduation-cap"></i>
-                    <div>
-                        <span class="detail-label">专业</span>
-                        <span class="detail-value" id="detail-major">计算机科学</span>
-                    </div>
+                <div class="stat-item">
+                  <strong id="post-count">0</strong>
+                  <span>动态</span>
                 </div>
-                <div class="detail-item">
-                    <i class="fas fa-calendar-alt"></i>
-                    <div>
-                        <span class="detail-label">注册时间</span>
-                        <span class="detail-value" id="detail-register-date">2024-01-01</span>
-                    </div>
+                <div class="stat-item">
+                  <strong id="like-count">0</strong>
+                  <span>获赞</span>
                 </div>
-                <div class="detail-item">
-                    <i class="fas fa-clock"></i>
-                    <div>
-                        <span class="detail-label">最后活跃</span>
-                        <span class="detail-value" id="detail-last-active">刚刚</span>
-                    </div>
-                </div>
+              </div>
+
+              <div class="profile-actions">
+                <button
+                  class="btn btn-primary"
+                  id="follow-btn"
+                  style="display: none"
+                >
+                  <i class="fas fa-user-plus"></i> 关注
+                </button>
+                <button
+                  class="btn btn-outline"
+                  id="message-btn"
+                  style="display: none"
+                >
+                  <i class="fas fa-envelope"></i> 私信
+                </button>
+                <button class="btn btn-outline" id="edit-profile-btn">
+                  <i class="fas fa-edit"></i> 编辑资料
+                </button>
+              </div>
             </div>
-            
-            <!-- 兴趣标签 -->
-            <div class="profile-tags">
-                <h3><i class="fas fa-tags"></i> 兴趣标签</h3>
-                <div class="tags-container" id="profile-tags">
-                    <!-- 标签将由JS动态生成 -->
-                </div>
-            </div>
+          </div>
         </div>
-        
-        <!-- 内容区域 -->
-        <div class="profile-content">
-            <!-- 标签导航 -->
-            <div class="profile-tabs">
-                <button class="tab-btn active" data-tab="posts">
-                    <i class="fas fa-newspaper"></i> 我的动态
-                </button>
-                <button class="tab-btn" data-tab="likes">
-                    <i class="fas fa-heart"></i> 点赞过的
-                </button>
-                <button class="tab-btn" data-tab="favorites">
-                    <i class="fas fa-star"></i> 收藏
-                </button>
-                <button class="tab-btn" data-tab="followers">
-                    <i class="fas fa-users"></i> 粉丝
-                </button>
-                <button class="tab-btn" data-tab="following">
-                    <i class="fas fa-user-friends"></i> 关注
-                </button>
-                <button class="tab-btn" data-tab="settings" id="settings-tab">
-                    <i class="fas fa-cog"></i> 设置
-                </button>
+
+        <!-- 用户详情 -->
+        <div class="profile-details-grid">
+          <div class="detail-item">
+            <i class="fas fa-id-card"></i>
+            <div>
+              <span class="detail-label">学号</span>
+              <span class="detail-value" id="detail-student-id"
+                >2023000000</span
+              >
             </div>
-            
-            <!-- 动态列表 -->
-            <div class="tab-content active" id="posts-content">
-                <div class="posts-container" id="user-posts">
-                    <!-- 用户的动态将在这里显示 -->
-                </div>
+          </div>
+          <div class="detail-item">
+            <i class="fas fa-envelope"></i>
+            <div>
+              <span class="detail-label">邮箱</span>
+              <span class="detail-value" id="detail-email"
+                >example@szu.edu.cn</span
+              >
             </div>
-            
-            <!-- 点赞过的动态 -->
-            <div class="tab-content" id="likes-content">
-                <div class="posts-container" id="liked-posts">
-                    <!-- 点赞过的动态将在这里显示 -->
-                </div>
+          </div>
+          <div class="detail-item">
+            <i class="fas fa-graduation-cap"></i>
+            <div>
+              <span class="detail-label">专业</span>
+              <span class="detail-value" id="detail-major">计算机科学</span>
             </div>
-            
-            <!-- 收藏 -->
-            <div class="tab-content" id="favorites-content">
-                <div class="posts-container" id="favorite-posts">
-                    <!-- 收藏的动态将在这里显示 -->
-                </div>
+          </div>
+          <div class="detail-item">
+            <i class="fas fa-calendar-alt"></i>
+            <div>
+              <span class="detail-label">注册时间</span>
+              <span class="detail-value" id="detail-register-date"
+                >2024-01-01</span
+              >
             </div>
-            
-            <!-- 粉丝列表 -->
-            <div class="tab-content" id="followers-content">
-                <div class="users-container" id="followers-list">
-                    <!-- 粉丝列表将在这里显示 -->
-                </div>
+          </div>
+          <div class="detail-item">
+            <i class="fas fa-clock"></i>
+            <div>
+              <span class="detail-label">最后活跃</span>
+              <span class="detail-value" id="detail-last-active">刚刚</span>
             </div>
-            
-            <!-- 关注列表 -->
-            <div class="tab-content" id="following-content">
-                <div class="users-container" id="following-list">
-                    <!-- 关注列表将在这里显示 -->
-                </div>
-            </div>
-            
-            <!-- 设置 -->
-            <div class="tab-content" id="settings-content">
-                <div class="settings-container">
-                    <!-- 设置内容将在JS中动态生成 -->
-                </div>
-            </div>
+          </div>
         </div>
+
+        <!-- 兴趣标签 -->
+        <div class="profile-tags">
+          <h3><i class="fas fa-tags"></i> 兴趣标签</h3>
+          <div class="tags-container" id="profile-tags">
+            <!-- 标签将由JS动态生成 -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 内容区域 -->
+      <div class="profile-content">
+        <!-- 标签导航 -->
+        <div class="profile-tabs">
+          <button class="tab-btn active" data-tab="posts">
+            <i class="fas fa-newspaper"></i> 我的动态
+          </button>
+          <button class="tab-btn" data-tab="likes">
+            <i class="fas fa-heart"></i> 点赞过的
+          </button>
+          <button class="tab-btn" data-tab="favorites">
+            <i class="fas fa-star"></i> 收藏
+          </button>
+          <button class="tab-btn" data-tab="followers">
+            <i class="fas fa-users"></i> 粉丝
+          </button>
+          <button class="tab-btn" data-tab="following">
+            <i class="fas fa-user-friends"></i> 关注
+          </button>
+          <button class="tab-btn" data-tab="settings" id="settings-tab">
+            <i class="fas fa-cog"></i> 设置
+          </button>
+        </div>
+
+        <!-- 动态列表 -->
+        <div class="tab-content active" id="posts-content">
+          <div class="posts-container" id="user-posts">
+            <!-- 用户的动态将在这里显示 -->
+          </div>
+        </div>
+
+        <!-- 点赞过的动态 -->
+        <div class="tab-content" id="likes-content">
+          <div class="posts-container" id="liked-posts">
+            <!-- 点赞过的动态将在这里显示 -->
+          </div>
+        </div>
+
+        <!-- 收藏 -->
+        <div class="tab-content" id="favorites-content">
+          <div class="posts-container" id="favorite-posts">
+            <!-- 收藏的动态将在这里显示 -->
+          </div>
+        </div>
+
+        <!-- 粉丝列表 -->
+        <div class="tab-content" id="followers-content">
+          <div class="users-container" id="followers-list">
+            <!-- 粉丝列表将在这里显示 -->
+          </div>
+        </div>
+
+        <!-- 关注列表 -->
+        <div class="tab-content" id="following-content">
+          <div class="users-container" id="following-list">
+            <!-- 关注列表将在这里显示 -->
+          </div>
+        </div>
+
+        <!-- 设置 -->
+        <div class="tab-content" id="settings-content">
+          <div class="settings-container">
+            <!-- 设置内容将在JS中动态生成 -->
+          </div>
+        </div>
+      </div>
     </div>
 
-<!-- 编辑资料模态框 - 简化版 -->
-<div class="modal-overlay" id="edit-profile-modal" style="display: none;">
-    <div class="modal-container">
+    <!-- 编辑资料模态框 - 简化版 -->
+    <div class="modal-overlay" id="edit-profile-modal" style="display: none">
+      <div class="modal-container">
         <div class="modal-header">
-            <h3><i class="fas fa-edit"></i> 编辑个人资料</h3>
-            <button class="modal-close" id="close-edit-modal">&times;</button>
+          <h3><i class="fas fa-edit"></i> 编辑个人资料</h3>
+          <button class="modal-close" id="close-edit-modal">&times;</button>
         </div>
-        
+
         <div class="modal-body">
-            <form id="edit-profile-form">
-                <!-- 昵称 -->
-                <div class="form-group">
-                    <label for="edit-nickname"><i class="fas fa-user"></i> 昵称</label>
-                    <input type="text" id="edit-nickname" placeholder="请输入昵称" maxlength="20">
-                    <div class="char-count">
-                        <span id="nickname-count">0</span>/20
-                    </div>
+          <form id="edit-profile-form">
+            <!-- 昵称 -->
+            <div class="form-group">
+              <label for="edit-nickname"
+                ><i class="fas fa-user"></i> 昵称</label
+              >
+              <input
+                type="text"
+                id="edit-nickname"
+                placeholder="请输入昵称"
+                maxlength="20"
+              />
+              <div class="char-count">
+                <span id="nickname-count">0</span>/20
+              </div>
+            </div>
+
+            <!-- 个人简介 -->
+            <div class="form-group">
+              <label for="edit-bio"
+                ><i class="fas fa-file-alt"></i> 个人简介</label
+              >
+              <textarea
+                id="edit-bio"
+                placeholder="介绍一下你自己吧..."
+                rows="3"
+                maxlength="200"
+              ></textarea>
+              <div class="char-count"><span id="bio-count">0</span>/200</div>
+            </div>
+
+            <!-- 专业 -->
+            <div class="form-group">
+              <label for="edit-major"
+                ><i class="fas fa-graduation-cap"></i> 专业</label
+              >
+              <select id="edit-major">
+                <option value="计算机科学">计算机科学</option>
+                <option value="软件工程">软件工程</option>
+                <option value="网络工程">网络工程</option>
+                <option value="人工智能">人工智能</option>
+                <option value="数据科学">数据科学</option>
+                <option value="信息安全">信息安全</option>
+                <option value="电子信息工程">电子信息工程</option>
+                <option value="其他">其他</option>
+              </select>
+            </div>
+
+            <!-- 邮箱 -->
+            <div class="form-group">
+              <label for="edit-email"
+                ><i class="fas fa-envelope"></i> 邮箱</label
+              >
+              <input type="email" id="edit-email" placeholder="邮箱地址" />
+            </div>
+
+            <!-- 兴趣标签 -->
+            <div class="form-group">
+              <label><i class="fas fa-tags"></i> 兴趣标签</label>
+              <div class="tags-input-container">
+                <div class="selected-tags" id="selected-tags">
+                  <!-- 已选标签会动态添加到这里 -->
                 </div>
-                
-                <!-- 个人简介 -->
-                <div class="form-group">
-                    <label for="edit-bio"><i class="fas fa-file-alt"></i> 个人简介</label>
-                    <textarea id="edit-bio" placeholder="介绍一下你自己吧..." rows="3" maxlength="200"></textarea>
-                    <div class="char-count">
-                        <span id="bio-count">0</span>/200
-                    </div>
+                <input
+                  type="text"
+                  id="tag-input"
+                  placeholder="添加标签（按回车确认）"
+                  maxlength="10"
+                />
+                <div class="tag-hint">
+                  输入标签后按 Enter 添加，最多添加5个标签
                 </div>
-                
-                <!-- 专业 -->
-                <div class="form-group">
-                    <label for="edit-major"><i class="fas fa-graduation-cap"></i> 专业</label>
-                    <select id="edit-major">
-                        <option value="计算机科学">计算机科学</option>
-                        <option value="软件工程">软件工程</option>
-                        <option value="网络工程">网络工程</option>
-                        <option value="人工智能">人工智能</option>
-                        <option value="数据科学">数据科学</option>
-                        <option value="信息安全">信息安全</option>
-                        <option value="电子信息工程">电子信息工程</option>
-                        <option value="其他">其他</option>
-                    </select>
-                </div>
-                
-                <!-- 邮箱 -->
-                <div class="form-group">
-                    <label for="edit-email"><i class="fas fa-envelope"></i> 邮箱</label>
-                    <input type="email" id="edit-email" placeholder="邮箱地址">
-                </div>
-                
-                <!-- 兴趣标签 -->
-                <div class="form-group">
-                    <label><i class="fas fa-tags"></i> 兴趣标签</label>
-                    <div class="tags-input-container">
-                        <div class="selected-tags" id="selected-tags">
-                            <!-- 已选标签会动态添加到这里 -->
-                        </div>
-                        <input type="text" 
-                               id="tag-input" 
-                               placeholder="添加标签（按回车确认）"
-                               maxlength="10">
-                        <div class="tag-hint">输入标签后按 Enter 添加，最多添加5个标签</div>
-                    </div>
-                </div>
-            </form>
+              </div>
+            </div>
+          </form>
         </div>
-        
+
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" id="cancel-edit">取消</button>
-            <button type="button" class="btn btn-primary" id="save-profile">保存修改</button>
+          <button type="button" class="btn btn-secondary" id="cancel-edit">
+            取消
+          </button>
+          <button type="button" class="btn btn-primary" id="save-profile">
+            保存修改
+          </button>
         </div>
+      </div>
     </div>
-</div>
     <!-- 脚本文件 -->
-     <!-- 在最后添加这个测试脚本 -->
-<script>
-// 测试脚本
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('=== 页面加载完成 ===');
-    console.log('编辑按钮:', document.getElementById('edit-profile-btn'));
-    console.log('模态框:', document.getElementById('edit-profile-modal'));
-    console.log('关闭按钮:', document.getElementById('close-edit-modal'));
-    console.log('取消按钮:', document.getElementById('cancel-edit'));
-    console.log('保存按钮:', document.getElementById('save-profile'));
-    
-    // 手动测试函数
-    window.testEditModal = function() {
-        const modal = document.getElementById('edit-profile-modal');
-        if (modal) {
-            modal.classList.add('active');
-            console.log('模态框已打开（测试）');
-        }
-    };
-    
-    window.testCloseModal = function() {
-        const modal = document.getElementById('edit-profile-modal');
-        if (modal) {
-            modal.classList.remove('active');
-            console.log('模态框已关闭（测试）');
-        }
-    };
-});
-</script>
+    <!-- 在最后添加这个测试脚本 -->
+    <script>
+      // 测试脚本
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("=== 页面加载完成 ===");
+        console.log("编辑按钮:", document.getElementById("edit-profile-btn"));
+        console.log("模态框:", document.getElementById("edit-profile-modal"));
+        console.log("关闭按钮:", document.getElementById("close-edit-modal"));
+        console.log("取消按钮:", document.getElementById("cancel-edit"));
+        console.log("保存按钮:", document.getElementById("save-profile"));
+
+        // 手动测试函数
+        window.testEditModal = function () {
+          const modal = document.getElementById("edit-profile-modal");
+          if (modal) {
+            modal.classList.add("active");
+            console.log("模态框已打开（测试）");
+          }
+        };
+
+        window.testCloseModal = function () {
+          const modal = document.getElementById("edit-profile-modal");
+          if (modal) {
+            modal.classList.remove("active");
+            console.log("模态框已关闭（测试）");
+          }
+        };
+      });
+    </script>
     <script src="js/app.js"></script>
     <script src="js/profile.js"></script>
     <script src="js/profile-edit.js"></script>
-</body>
+  </body>
 </html>

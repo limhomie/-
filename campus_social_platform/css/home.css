@@ -1,252 +1,328 @@
 /* 首页样式（css/home.css） */
 /* 欢迎横幅 */
 .welcome-banner {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: white;
-    padding: 30px;
-    border-radius: var(--radius);
-    margin-bottom: 20px;
-    text-align: center;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  color: white;
+  padding: 30px;
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 .welcome-banner h1 {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
+  font-size: 2.5rem;
+  margin-bottom: 10px;
 }
 
 .welcome-banner p {
-    font-size: 1.1rem;
-    opacity: 0.9;
-    margin-bottom: 20px;
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin-bottom: 20px;
 }
 
 .stats {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
 }
 
 .stats span {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
 }
 
 /* 动态筛选 */
 .feed-filter {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    padding: 10px;
-    background: white;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 10px;
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
 }
 
 .filter-btn {
-    padding: 8px 20px;
-    border: 1px solid var(--border-color);
-    background: white;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: var(--transition);
+  padding: 8px 20px;
+  border: 1px solid var(--border-color);
+  background: white;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: var(--transition);
 }
 
 .filter-btn.active {
-    background: var(--primary-color);
-    color: white;
-    border-color: var(--primary-color);
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
 }
 
 .filter-btn:hover:not(.active) {
-    background: var(--light-color);
+  background: var(--light-color);
 }
 
 /* 动态卡片 */
 .post-card {
-    transition: var(--transition);
+  cursor: pointer;
+  transition: var(--transition);
 }
 
 .post-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+
+.post-detail-content p {
+  line-height: 1.8;
+  color: #333;
+  font-size: 16px;
 }
 
 .post-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  position: relative;
+  overflow: visible !important;
 }
 
 .post-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 15px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 15px;
 }
 
 .post-user-info {
-    flex: 1;
+  flex: 1;
 }
 
 .post-username {
-    font-weight: 600;
-    color: var(--dark-color);
-    text-decoration: none;
+  font-weight: 600;
+  color: var(--dark-color);
+  text-decoration: none;
 }
 
 .post-username:hover {
-    color: var(--primary-color);
+  color: var(--primary-color);
 }
 
 .post-time {
-    font-size: 12px;
-    color: var(--gray-color);
-    margin-top: 3px;
+  font-size: 12px;
+  color: var(--gray-color);
+  margin-top: 3px;
 }
 
 .post-content {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 .post-text {
-    line-height: 1.6;
-    margin-bottom: 15px;
+  line-height: 1.6;
+  margin-bottom: 15px;
 }
 
 .post-images {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 10px;
-    margin-bottom: 15px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin-bottom: 15px;
 }
 
 .post-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: var(--radius);
-    cursor: pointer;
-    transition: var(--transition);
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
 }
 
 .post-image:hover {
-    opacity: 0.9;
+  opacity: 0.9;
 }
 
 .post-actions {
-    display: flex;
-    gap: 20px;
-    padding-top: 15px;
-    border-top: 1px solid var(--border-color);
+  display: flex;
+  gap: 20px;
+  padding-top: 15px;
+  border-top: 1px solid var(--border-color);
 }
 
 .action-btn {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    background: none;
-    border: none;
-    color: var(--gray-color);
-    cursor: pointer;
-    padding: 5px 10px;
-    border-radius: var(--radius);
-    transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  color: var(--gray-color);
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: var(--radius);
+  transition: var(--transition);
 }
 
 .action-btn:hover {
-    background: var(--light-color);
-    color: var(--primary-color);
+  background: var(--light-color);
+  color: var(--primary-color);
 }
 
 .action-btn.liked {
-    color: var(--danger-color);
+  color: var(--danger-color);
 }
 
 .action-btn i {
-    font-size: 16px;
+  font-size: 16px;
 }
 
 /* 加载更多 */
 .load-more {
-    text-align: center;
-    margin: 30px 0;
+  text-align: center;
+  margin: 30px 0;
 }
 
 /* 活跃用户列表 */
 .active-users-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .active-user {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px;
-    border-radius: var(--radius);
-    transition: var(--transition);
-    text-decoration: none;
-    color: inherit;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: var(--radius);
+  transition: var(--transition);
+  text-decoration: none;
+  color: inherit;
 }
 
 .active-user:hover {
-    background: var(--light-color);
+  background: var(--light-color);
 }
 
 .active-user-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .active-user-info {
-    flex: 1;
+  flex: 1;
 }
 
 .active-user-name {
-    font-weight: 500;
-    color: var(--dark-color);
+  font-weight: 500;
+  color: var(--dark-color);
 }
 
 .active-user-status {
-    font-size: 12px;
-    color: var(--gray-color);
+  font-size: 12px;
+  color: var(--gray-color);
 }
 
 /* 游客模式样式 */
 .post-card.visitor-mode .action-btn:not(.like-btn) {
-    cursor: not-allowed;
-    opacity: 0.5;
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .post-card.visitor-mode .comment-input {
-    cursor: not-allowed;
-    opacity: 0.5;
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .login-required {
-    text-align: center;
-    padding: 10px;
-    background: #fff8e1;
-    border: 1px solid #ffecb3;
-    border-radius: var(--radius);
-    margin-top: 10px;
-    font-size: 14px;
-    color: #ff9800;
+  text-align: center;
+  padding: 10px;
+  background: #fff8e1;
+  border: 1px solid #ffecb3;
+  border-radius: var(--radius);
+  margin-top: 10px;
+  font-size: 14px;
+  color: #ff9800;
 }
 
 .login-required a {
-    color: var(--primary-color);
-    text-decoration: none;
-    font-weight: 500;
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
 }
 
 .login-required a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
+}
+
+/* 容器 */
+.post-actions-menu {
+  position: relative;
+  margin-left: auto;
+}
+
+/* 三个点按钮 */
+.action-menu-btn {
+  background: none;
+  border: none;
+  color: #95a5a6;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.action-menu-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #333;
+}
+
+/* 下拉菜单面板 */
+.action-menu-dropdown {
+  display: none; /* 初始隐藏 */
+  position: absolute;
+  right: 0;
+  top: 35px;
+  background: white;
+  min-width: 100px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* 阴影提升美感 */
+  z-index: 1000;
+  border: 1px solid #eee;
+  overflow: hidden;
+}
+
+/* 下拉菜单内的按钮 */
+.action-menu-dropdown button {
+  display: block;
+  width: 100%;
+  padding: 10px 15px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.action-menu-dropdown button:hover {
+  background-color: #f8f9fa;
+}
+
+.action-menu-dropdown button.danger {
+  color: #e74c3c;
+}
+
+.action-menu-dropdown button i {
+  margin-right: 8px;
+  width: 14px;
 }
