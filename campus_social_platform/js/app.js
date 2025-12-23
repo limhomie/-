@@ -12,6 +12,45 @@ document.addEventListener("DOMContentLoaded", function () {
   initApp();
 });
 
+// 智能时间显示函数（兼容字符串和时间戳）
+function smartFormatTime(time) {
+  if (!time && time !== 0) return "";
+
+  // 如果已经是相对字符串（刚刚 / N分钟前 / N小时前 / N天前），直接返回
+  if (typeof time === "string") {
+    const relPatterns = ["刚刚", "分钟前", "小时前", "天前"];
+    for (const p of relPatterns) {
+      if (time.includes(p)) return time;
+    }
+  }
+
+  let date;
+  if (typeof time === "number") date = new Date(time);
+  else date = new Date(time);
+
+  if (isNaN(date.getTime())) {
+    // 无法解析时，返回原始字符串
+    return time;
+  }
+
+  const now = new Date();
+  const diffMs = now - date;
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHour = Math.floor(diffMin / 60);
+  const diffDay = Math.floor(diffHour / 24);
+
+  if (diffSec < 60) return "刚刚";
+  if (diffMin < 60) return `${diffMin}分钟前`;
+  if (diffHour < 24) return `${diffHour}小时前`;
+  if (diffDay < 7) return `${diffDay}天前`;
+
+  // 7天以上，显示具体日期（年-月-日 可带时间）
+  const opts = { year: "numeric", month: "2-digit", day: "2-digit" };
+  const datePart = date.toLocaleDateString("zh-CN", opts).replace(/\//g, "-");
+  const timePart = date.toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" });
+  return `${datePart} ${timePart}`;
+}
 // 初始化应用
 function initApp() {
   loadMockData();
@@ -41,10 +80,42 @@ function loadMockData() {
   if (storedUsers && storedPosts) {
     users = JSON.parse(storedUsers);
     posts = JSON.parse(storedPosts);
+    // 如果本地已有数据，但缺少默认测试用户，则补齐（避免因早期运行导致某些用户丢失）
+    ensureMockUsers();
   } else {
     // 生成初始模拟数据
     generateMockData();
   }
+}
+
+// 确保默认的 mock 用户存在（合并而非覆盖现有数据）
+function ensureMockUsers() {
+  if (!Array.isArray(users)) users = [];
+
+  const defaults = [
+    { id: 1, student_id: "2023001001", password: "password123", nickname: "深大程序猿", email: "dev@szu.edu.cn", avatar: "images/avatar1.jpg", bio: "热爱编程的计算机系学生", tags: ["编程", "学习", "科技"], major: "计算机科学", followers: 125, following: 89, is_active: true, last_active: "刚刚", is_admin: true },
+    { id: 2, student_id: "2023002002", password: "password123", nickname: "校园摄影师", email: "photo@szu.edu.cn", avatar: "images/avatar2.jpg", bio: "用镜头记录校园美好瞬间", tags: ["摄影", "艺术", "旅行"], major: "艺术设计", followers: 356, following: 203, is_active: true, last_active: "5分钟前" },
+    { id: 3, student_id: "2023003003", password: "password123", nickname: "学习小能手", email: "study@szu.edu.cn", avatar: "images/avatar3.jpg", bio: "图书馆常驻选手", tags: ["学习", "阅读", "打卡"], major: "金融", followers: 189, following: 145, is_active: true, last_active: "10分钟前" }
+  ];
+
+  let changed = false;
+  defaults.forEach((d) => {
+    const existingIndex = users.findIndex((u) => u.student_id === d.student_id);
+    if (existingIndex === -1) {
+      users.push(d);
+      changed = true;
+    } else {
+      // 如果已存在但缺少密码，则补上默认密码（避免登录失败）
+      const existing = users[existingIndex];
+      if ((!existing.password || existing.password === "") && d.password) {
+        existing.password = d.password;
+        users[existingIndex] = existing;
+        changed = true;
+      }
+    }
+  });
+
+  if (changed) saveToLocalStorage();
 }
 
 // 获取当前用户（在profile.js和admin.js中也会用到）
@@ -161,8 +232,52 @@ function generateMockData() {
 
 // 保存数据到本地存储
 function saveToLocalStorage() {
-  localStorage.setItem("campus_social_users", JSON.stringify(users));
+  // 在写回 users 时合并已有 localStorage 中的用户，保留已有的密码字段
+  mergeAndSaveUsers(users);
   localStorage.setItem("campus_social_posts", JSON.stringify(posts));
+}
+
+// 合并并保存 users：保留已存在用户的 password 字段，避免覆盖丢失
+function mergeAndSaveUsers(usersArray) {
+  try {
+    const stored = JSON.parse(localStorage.getItem("campus_social_users") || "[]");
+
+    // 将 stored 转为以 student_id 为 key 的映射，方便合并
+    const map = new Map();
+    stored.forEach((u) => {
+      if (u && (u.student_id || u.id)) {
+        const key = u.student_id || String(u.id);
+        map.set(key, u);
+      }
+    });
+
+    // 合并 usersArray
+    const merged = [];
+    usersArray.forEach((u) => {
+      const key = u.student_id || String(u.id);
+      const existing = map.get(key);
+      if (existing) {
+        // 保留 existing 的 password，当新对象缺少时
+        if ((!u.password || u.password === "") && existing.password) {
+          u.password = existing.password;
+        }
+        // 合并其他字段（以 u 为准，但不移除 existing 中的额外字段）
+        const combined = Object.assign({}, existing, u);
+        merged.push(combined);
+        map.delete(key);
+      } else {
+        merged.push(u);
+      }
+    });
+
+    // 把 stored 中未在 usersArray 出现的用户也保留下来
+    map.forEach((v) => merged.push(v));
+
+    localStorage.setItem("campus_social_users", JSON.stringify(merged));
+  } catch (e) {
+    // 解析失败则回退为直接写入
+    localStorage.setItem("campus_social_users", JSON.stringify(usersArray));
+  }
 }
 
 // 检查登录状态
@@ -361,7 +476,30 @@ function setActiveFilter(filter) {
 }
 
 // 渲染动态
-function renderPosts() {
+function getFollows() {
+  return JSON.parse(localStorage.getItem("campus_social_follows") || "[]");
+}
+
+function isFollowing(followerId, followingId) {
+  const follows = getFollows();
+  return follows.some((f) => f.follower_id === followerId && f.following_id === followingId);
+}
+
+function isMutualFollow(userAId, userBId) {
+  return isFollowing(userAId, userBId) && isFollowing(userBId, userAId);
+}
+
+function canViewPost(post, viewer) {
+  // visibility: 'public' (default) or 'friends'
+  const visibility = post.visibility || 'public';
+  if (visibility !== 'friends') return true;
+  // friends-only: author always can view
+  if (viewer && viewer.id === post.user_id) return true;
+  if (!viewer) return false;
+  return isMutualFollow(viewer.id, post.user_id);
+}
+
+function renderPosts(postsData = null) {
   const postsFeed = document.getElementById("posts-feed");
   if (!postsFeed) return;
 
@@ -369,15 +507,17 @@ function renderPosts() {
   postsFeed.innerHTML = "";
 
   // 筛选动态
-  let filteredPosts = [...posts];
+  let filteredPosts = postsData ? [...postsData] : [...posts];
 
   if (currentFilter === "popular") {
     filteredPosts.sort((a, b) => b.likes - a.likes);
   } else if (currentFilter === "following" && currentUser) {
-    // 这里简化处理，实际应该只显示关注用户的动态
-    filteredPosts = filteredPosts.filter(
-      (post) => post.user_id !== currentUser.id // 实际应根据关注关系筛选
-    );
+    // 只显示当前用户关注的人的动态
+    const follows = getFollows();
+    const followingIds = follows
+      .filter((f) => f.follower_id === currentUser.id)
+      .map((f) => f.following_id);
+    filteredPosts = filteredPosts.filter((post) => followingIds.includes(post.user_id));
   }
 
   // 分页处理
@@ -412,8 +552,13 @@ function createPostElement(post) {
   postElement.className = `post-card ${isVisitor ? "visitor-mode" : ""}`;
   postElement.setAttribute("data-post-id", post.id);
 
-  postElement.style.cursor = "pointer";
+  const canView = canViewPost(post, currentUser);
+  postElement.style.cursor = canView ? "pointer" : "default";
   postElement.onclick = function () {
+    if (!canView) {
+      alert("该动态仅对互为关注的好友可见");
+      return;
+    }
     window.location.href = `post-detail.html?id=${post.id}`;
   };
 
@@ -460,7 +605,7 @@ function createPostElement(post) {
                 }" class="post-username" onclick="event.stopPropagation()">${
     post.username
   }</a>
-                <div class="post-time">${post.created_at}</div>
+                <div class="post-time">${smartFormatTime(post.created_at)}</div>
             </div>
             ${
               isAuthor
@@ -479,26 +624,26 @@ function createPostElement(post) {
             }
         </div>
         <div class="post-content">
-            <div class="post-text">${post.content}</div>
-            ${tagsHTML}
-            ${imagesHTML}
+          ${canView ? `<div class="post-text">${post.content}</div>` : `<div class="post-text locked">该动态仅对互为关注的好友可见</div>`}
+          ${canView ? tagsHTML : ""}
+          ${canView ? imagesHTML : ""}
         </div>
         <div class="post-actions" onclick="event.stopPropagation()">
-            <button class="action-btn like-btn ${post.is_liked ? "liked" : ""}" 
-                    onclick="toggleLike(${post.id})"
-                    ${isVisitor ? "disabled" : ""}>
+                <button class="action-btn like-btn ${post.is_liked ? "liked" : ""}" 
+                  onclick="event.stopPropagation(); toggleLike(${post.id}, this)"
+                  ${isVisitor || !canView ? "disabled" : ""}>
                 <i class="fas fa-heart"></i>
                 <span class="action-count">${post.likes}</span>
             </button>
-            <button class="action-btn comment-btn" 
-                    onclick="viewComments(${post.id})"
-                    ${isVisitor ? "disabled" : ""}>
+                <button class="action-btn comment-btn" 
+                  onclick="event.stopPropagation(); viewComments(${post.id})"
+                  ${isVisitor || !canView ? "disabled" : ""}>
                 <i class="fas fa-comment"></i>
                 <span class="action-count">${post.comments}</span>
             </button>
-            <button class="action-btn share-btn" 
-                    onclick="sharePost(${post.id})"
-                    ${isVisitor ? "disabled" : ""}>
+                <button class="action-btn share-btn" 
+                  onclick="event.stopPropagation(); sharePost(${post.id})"
+                  ${isVisitor || !canView ? "disabled" : ""}>
                 <i class="fas fa-share-alt"></i>
                 <span class="action-count">${post.shares}</span>
             </button>

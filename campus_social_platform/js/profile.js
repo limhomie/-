@@ -337,7 +337,7 @@ function createPostCard(post) {
         <div class="post-card" data-post-id="${post.id}">
             <div class="post-header">
                 <div class="post-user-info">
-                    <span class="post-time">${post.created_at}</span>
+                    <span class="post-time">${smartFormatTime(post.created_at)}</span>
                 </div>
                 <div class="post-actions-menu">
                     <button class="action-menu-btn" onclick="togglePostMenu(${post.id})">

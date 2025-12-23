@@ -18,8 +18,16 @@ document.addEventListener("DOMContentLoaded", function () {
   const followingTab = document.getElementById("following-tab");
 
   if (followingTab) {
-    followingTab.addEventListener("click", function () {
-      window.location.href = "following-posts.html";
+    followingTab.addEventListener("click", function (e) {
+      e.preventDefault();
+      // 如果在首页，使用过滤展示；否则跳转到关注页
+      if (window.location.pathname.includes("index.html") || window.location.pathname === "/") {
+        if (typeof setActiveFilter === 'function') {
+          setActiveFilter('following');
+        }
+      } else {
+        window.location.href = "following-posts.html";
+      }
     });
   }
 });
@@ -181,10 +189,8 @@ function renderPostDetail(post) {
             <img src="${post.avatar}" alt="${post.username}" class="post-avatar-detail">
           </a>
             <div class="post-user-info-detail">
-                <a href="profile.html?id=${
-                  post.user_id
-                }" class="post-username-detail">${post.username}</a>
-                <div class="post-time-detail">${post.created_at}</div>
+                <a href="profile.html?id=${post.user_id}" class="post-username-detail">${post.username}</a>
+                <div class="post-time-detail">${smartFormatTime(post.created_at)}</div>
             </div>
             ${
               isCurrentUserPost(post.user_id)
@@ -216,15 +222,13 @@ function renderPostDetail(post) {
         </div>
         <div class="post-actions-detail">
             <button class="action-btn like-btn ${post.is_liked ? "liked" : ""}" 
-                    onclick="toggleLike(${post.id})">
+                onclick="event.stopPropagation(); toggleLike(${post.id}, this)">
                 <i class="fas fa-heart"></i> ${post.is_liked ? "已赞" : "点赞"}
             </button>
-            <button class="action-btn comment-btn" onclick="focusCommentInput()">
+            <button class="action-btn comment-btn" onclick="event.stopPropagation(); focusCommentInput()">
                 <i class="fas fa-comment"></i> 评论
             </button>
-            <button class="action-btn share-btn" onclick="sharePost(${
-              post.id
-            })">
+            <button class="action-btn share-btn" onclick="event.stopPropagation(); sharePost(${post.id})">
                 <i class="fas fa-share-alt"></i> 分享
             </button>
         </div>
@@ -397,7 +401,7 @@ function loadComments(postId, container = null) {
             <div class="comment-content">
                 <div class="comment-header">
                     <span class="comment-username">${comment.username}</span>
-                    <span class="comment-time">${comment.created_at}</span>
+                    <span class="comment-time">${smartFormatTime(comment.created_at)}</span>
                 </div>
                 <div class="comment-text">${comment.content}</div>
                 <div class="comment-actions">
@@ -458,7 +462,7 @@ function submitComment(postId) {
     username: currentUser.nickname,
     avatar: currentUser.avatar,
     content: content,
-    created_at: "刚刚",
+    created_at: new Date().toISOString(),
     parent_id: null, // 回复评论时使用
   };
 
@@ -901,6 +905,9 @@ function handlePostSubmit(e) {
       posts[postIndex].content = content;
       posts[postIndex].tags = tags;
       posts[postIndex].images = images;
+      // 更新可见性
+      const visibilityElem = document.getElementById("visibility-friends");
+      posts[postIndex].visibility = visibilityElem && visibilityElem.checked ? 'friends' : 'public';
       posts[postIndex].updated_at = new Date().toISOString();
 
       showToast("动态更新成功");
@@ -919,7 +926,8 @@ function handlePostSubmit(e) {
       comments: 0,
       shares: 0,
       is_liked: false,
-      created_at: "刚刚",
+      created_at: new Date().toISOString(),
+      visibility: (document.getElementById("visibility-friends") && document.getElementById("visibility-friends").checked) ? 'friends' : 'public',
       updated_at: null,
     };
 

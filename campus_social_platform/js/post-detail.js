@@ -14,6 +14,14 @@ document.addEventListener("DOMContentLoaded", function () {
   const post = storedPosts.find((p) => p.id === postId);
 
   if (post) {
+    // 检查可见性
+    if (typeof canViewPost === 'function') {
+      const currentUser = JSON.parse(localStorage.getItem("campus_social_current_user") || sessionStorage.getItem("campus_social_current_user") || null);
+      if (!canViewPost(post, currentUser)) {
+        document.getElementById("post-content-target").innerHTML = `\n            <div class="locked-post">\n                <i class="fas fa-lock"></i> 该动态仅对互为关注的好友可见\n            </div>`;
+        return;
+      }
+    }
     renderFullPost(post);
   } else {
     document.getElementById("post-content-target").innerHTML =
@@ -62,7 +70,7 @@ function renderPostMain(post) {
                 <img src="${authorAvatar}" class="post-avatar" style="cursor: pointer;">
                 <div style="cursor: pointer;">
                     <h4>${post.username}</h4>
-                    <span class="post-time">${post.created_at}</span>
+                    <span class="post-time">${smartFormatTime(post.created_at || post.time)}</span>
                 </div>
             </div>
         </div>
@@ -73,7 +81,7 @@ function renderPostMain(post) {
         <div class="post-actions-detail">
             <button class="action-btn ${
               post.isLiked ? "liked" : ""
-            }" onclick="toggleLike(${post.id})">
+            }" onclick="event.stopPropagation(); toggleLike(${post.id}, this)">
                 <i class="fa${post.isLiked ? "s" : "r"} fa-thumbs-up"></i> 
                 <span>${post.likes}</span>
             </button>
@@ -115,8 +123,8 @@ function renderComments(postId) {
             <img src="${c.userAvatar}" class="active-user-avatar">
             <div class="comment-body">
                 <div class="comment-user">
-                    ${c.username}
-                    <span class="comment-time">${c.time}</span>
+                  ${c.username}
+                  <span class="comment-time">${smartFormatTime(c.time)}</span>
                 </div>
                 <div class="comment-text">${c.text}</div>
             </div>
@@ -145,7 +153,7 @@ function handleAddComment(postId) {
     username: currentUser.nickname,
     userAvatar: currentUser.avatar || "img/default-avatar.png",
     text: text,
-    time: "刚刚",
+    time: new Date().toISOString(),
   };
 
   const allComments = JSON.parse(
@@ -172,7 +180,7 @@ function renderFullPost(post) {
         }" class="detail-avatar" style="cursor: pointer;">
         <div class="detail-user-info" style="cursor: pointer;">
           <h4>${post.username}</h4>
-          <span class="detail-time">${post.time} (发布于深大校园)</span>
+          <span class="detail-time">${smartFormatTime(post.created_at || post.time)} (发布于深大校园)</span>
         </div>
       </div>
     </div>

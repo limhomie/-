@@ -630,14 +630,14 @@ function isValidEmail(email) {
         return false;
     }
     
-    // 正则表达式验证
+    // 正则表达式验证（基本格式）
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
         return false;
     }
-    
-    // 检查顶级域名长度
-    const domain = email.split('@')[1];
-    const tld = domain.split('.').pop();
-    return tld.length >= 2;
+
+    // 强制顶级域名为 .com（不接受其他 TLD）
+    const domain = (email.split('@')[1] || '').toLowerCase();
+    const tld = domain.split('.').pop() || '';
+    return tld === 'com';
 }
